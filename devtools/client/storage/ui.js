@@ -8,6 +8,7 @@
 const {Cu} = require("chrome");
 const EventEmitter = require("devtools/shared/event-emitter");
 const {LocalizationHelper} = require("devtools/client/shared/l10n");
+const JSOL = require("devtools/client/shared/vendor/jsol");
 
 loader.lazyRequireGetter(this, "TreeWidget",
                          "devtools/client/shared/widgets/TreeWidget", true);
@@ -552,7 +553,7 @@ StorageUI.prototype = {
   parseItemValue: function(name, value) {
     let json = null;
     try {
-      json = JSON.parse(value);
+      json = JSOL.parse(value);
     } catch (ex) {
       json = null;
     }
