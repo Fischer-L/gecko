@@ -736,9 +736,7 @@ var gAdvancedPane = {
    */
   showUpdates: function ()
   {
-    var prompter = Components.classes["@mozilla.org/updates/update-prompt;1"]
-                             .createInstance(Components.interfaces.nsIUpdatePrompt);
-    prompter.showUpdateHistory(window);
+    gSubDialog.open("chrome://mozapps/content/update/history.xul");
   },
 #endif
 
