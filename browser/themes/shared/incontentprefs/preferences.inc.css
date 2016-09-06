@@ -198,6 +198,34 @@ treecol {
   min-height: 36px !important;
 }
 
+#handlersView > listheader {
+  display: flex;
+  align-items: center;
+}
+
+#typeColumn {
+  width: 50%;
+  flex: none;
+}
+
+#actionColumn {
+  flex: 1;
+}
+
+.applicationsContent-handlerBox {
+  display: flex;
+  align-items: center;
+}
+
+.applicationsContent-handlerType {
+  flex: none;
+  width: calc(50% + 1px);
+}
+
+.applicationsContent-handlerAction {
+  flex: 1;
+}
+
 .typeIcon {
   margin-inline-start: 10px !important;
   margin-inline-end: 9px !important;
@@ -209,6 +237,7 @@ treecol {
 }
 
 .actionsMenu {
+  width: 100%;
   min-height: 36px;
 }
 

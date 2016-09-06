@@ -85,11 +85,9 @@
                flex="1">
     <listheader equalsize="always">
         <treecol id="typeColumn" label="&typeColumn.label;" value="type"
-                 accesskey="&typeColumn.accesskey;" persist="sortDirection"
-                 flex="1" sortDirection="ascending"/>
+                 accesskey="&typeColumn.accesskey;" persist="sortDirection" sortDirection="ascending"/>
         <treecol id="actionColumn" label="&actionColumn2.label;" value="action"
-                 accesskey="&actionColumn2.accesskey;" persist="sortDirection"
-                 flex="1"/>
+                 accesskey="&actionColumn2.accesskey;" persist="sortDirection"/>
     </listheader>
   </richlistbox>
 </vbox>
