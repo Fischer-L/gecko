@@ -1184,8 +1184,9 @@ var gApplicationsPane = {
     if (this._filter.value)
       visibleTypes = visibleTypes.filter(this._matchesFilter, this);
 
+    let item;
     for (let visibleType of visibleTypes) {
-      let item = document.createElement("richlistitem");
+      item = document.createElement("richlistitem");
       item.setAttribute("type", visibleType.type);
       item.setAttribute("typeDescription", this._describeType(visibleType));
       if (visibleType.smallIcon)
@@ -1200,6 +1201,9 @@ var gApplicationsPane = {
 
       this._list.appendChild(item);
     }
+
+    item = gApplicationsPane._list.querySelector("richlistitem");
+    this._list.querySelector("#typeColumn").style.width = item.getBoundingClientRect().width / 2 + "px";
 
     this._selectLastSelectedType();
   },
