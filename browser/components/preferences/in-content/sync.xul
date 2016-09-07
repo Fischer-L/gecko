@@ -211,6 +211,38 @@
         -->&mobilePromo3.iOSLink;</label><!--
         -->&mobilePromo3.end;
     </label>
+
+      <!-- TMP _KEY_
+
+        1. nsXULLabelFrame::RegUnregAccessKey only resigters xul label with control attr
+        2. Even relaxing xul label, and EventStateManager::ExecuteAccessKey handles <label class="text-link"> but still nothing happens 
+
+      <label id="bugzilla" class="text-link" href="https://bugzilla.mozilla.org" accesskey="z">bugzilla</label>
+      <html:a id="CNNz" target="_blank" href="http://edition.cnn.com/" accesskey="z">CNNz</html:a>
+      <html:a id="mmozilla" target="_blank" href="https://www.mozilla.com" accesskey="z">mozilla</html:a>
+
+      
+      <vbox>
+        <label id="xul_chkbox_label" control="xul_chkbox" accesskey="z">XUL checkbox z</label>
+        <checkbox id="xul_chkbox" />
+      </vbox>
+
+      <vbox>
+        <html:label id="html_male_label" for="male" accesskey="z">Male z</html:label>
+        <html:input type="radio" name="gender" id="male" value="male" />
+      </vbox>
+
+      <vbox>
+        <html:label id="html_label" accesskey="z">Just HTML lable z</html:label>
+      </vbox>
+
+      <vbox>
+        <label id="xul_label" accesskey="z">Just XUL lable z</label>
+      </vbox>
+      -->
+      <label id="bugzilla" class="text-link aabbcc" href="https://bugzilla.mozilla.org" accesskey="z">bugzillaz</label>_______
+      <label id="cnn" class="text-link-label" href="https://www.cnn.com" accesskey="q">CNNq</label>_____
+      <label id="only_label" class="" accesskey="w">Only_Labelw</label>
   </vbox>
 
   <vbox id="hasFxaAccount">
@@ -237,10 +269,6 @@
                   <html:a id="verifiedManage" target="_blank" accesskey="&verifiedManage.accesskey;"
                     onkeypress="gSyncPane.openManageFirefoxAccount(event);"
                   >&verifiedManage.label;</html:a>
-                  <label id="verifiedManage" class="text-link"
-                         onclick="gSyncPane.openManageFirefoxAccount(event);"
-                         onkeypress="gSyncPane.openManageFirefoxAccount(event);"><!--
-                  -->&verifiedManage.label;</label>
                 </hbox>
               </vbox>
             </hbox>

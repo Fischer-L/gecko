@@ -1,0 +1,703 @@
+ 0:00.09 /usr/bin/make -f client.mk MOZ_PARALLEL_BUILD=60 -s
+ 0:00.43 Adding client.mk options from /home/fischer/Projects/cmds/mozconfig-ff:
+ 0:00.43     MOZ_OBJDIR=/home/fischer/Projects/gecko/objdir-front-end
+ 0:00.43     OBJDIR=/home/fischer/Projects/gecko/objdir-front-end
+ 0:00.43     FOUND_MOZCONFIG=/home/fischer/Projects/cmds/mozconfig-ff
+ 0:00.57 Elapsed: 0.01s; From dist/xpi-stage: Kept 15 existing; Added/updated 0; Removed 112 files and 30 directories.
+ 0:00.57 Elapsed: 0.00s; From dist/branding: Kept 4 existing; Added/updated 0; Removed 0 files and 0 directories.
+ 0:00.58 Elapsed: 0.00s; From dist/private: Kept 0 existing; Added/updated 0; Removed 155 files and 2 directories.
+ 0:00.58 Elapsed: 0.00s; From dist/sdk: Kept 11 existing; Added/updated 0; Removed 12 files and 1 directories.
+ 0:00.58 Elapsed: 0.00s; From dist/public: Kept 0 existing; Added/updated 0; Removed 0 files and 0 directories.
+ 0:00.61 Elapsed: 0.03s; From dist/idl: Kept 1135 existing; Added/updated 0; Removed 0 files and 0 directories.
+ 0:00.69 Elapsed: 0.10s; From _tests: Kept 1122 existing; Added/updated 0; Removed 334 files and 54 directories.
+ 0:00.70 Elapsed: 0.13s; From dist/include: Kept 5124 existing; Added/updated 0; Removed 102 files and 2 directories.
+ 0:00.76 Elapsed: 0.17s; From dist/bin: Kept 2091 existing; Added/updated 0; Removed 2649 files and 269 directories.
+ 0:00.77 buildid.h
+ 0:00.77 source-repo.h
+ 0:00.97 cd util; /usr/bin/make private_export
+ 0:00.97 There are no private exports.
+ 0:00.98 application.ini.h
+ 0:00.98 cd mangle; /usr/bin/make private_export
+ 0:00.98 There are no private exports.
+ 0:00.98 There are no private exports.
+ 0:00.99 Creating /home/fischer/Projects/gecko/objdir-front-end/dist/private/nss
+ 0:01.00 There are no private exports.
+ 0:01.00 There are no private exports.
+ 0:01.01 cd freebl; /usr/bin/make private_export
+ 0:01.02 Makefile:630: warning: overriding commands for target `/home/fischer/Projects/gecko/objdir-front-end/security/nss/lib/freebl'
+ 0:01.02 Makefile:617: warning: ignoring old commands for target `/home/fischer/Projects/gecko/objdir-front-end/security/nss/lib/freebl'
+ 0:01.02 cd dbm; /usr/bin/make private_export
+ 0:01.02 There are no private exports.
+ 0:01.03 cd include; /usr/bin/make private_export
+ 0:01.03 cd mangle; /usr/bin/make export
+ 0:01.04 Creating /home/fischer/Projects/gecko/objdir-front-end/dist/private/dbm
+ 0:01.04 cd src; /usr/bin/make private_export
+ 0:01.05 There are no private exports.
+ 0:01.05 There are no private exports.
+ 0:01.05 cd softoken; /usr/bin/make private_export
+ 0:01.05 cd legacydb; /usr/bin/make private_export
+ 0:01.06 There are no private exports.
+ 0:01.06 cd base; /usr/bin/make private_export
+ 0:01.07 cd dev; /usr/bin/make private_export
+ 0:01.08 cd pki; /usr/bin/make private_export
+ 0:01.09 cd libpkix; /usr/bin/make private_export
+ 0:01.09 Elapsed: 0.03s; From ../../dist/idl: Kept 1135 existing; Added/updated 0; Removed 0 files and 0 directories.
+ 0:01.09 cd include; /usr/bin/make private_export
+ 0:01.11 cd pkix; /usr/bin/make private_export
+ 0:01.11 cd certsel; /usr/bin/make private_export
+ 0:01.12 cd crlsel; /usr/bin/make private_export
+ 0:01.13 cd checker; /usr/bin/make private_export
+ 0:01.14 cd params; /usr/bin/make private_export
+ 0:01.14 cd results; /usr/bin/make private_export
+ 0:01.16 cd store; /usr/bin/make private_export
+ 0:01.16 cd top; /usr/bin/make private_export
+ 0:01.17 cd util; /usr/bin/make private_export
+ 0:01.18 There are no private exports.
+ 0:01.18 cd pkix_pl_nss; /usr/bin/make private_export
+ 0:01.19 cd pki; /usr/bin/make private_export
+ 0:01.21 cd system; /usr/bin/make private_export
+ 0:01.21 cd module; /usr/bin/make private_export
+ 0:01.22 There are no private exports.
+ 0:01.22 There are no private exports.
+ 0:01.22 cd certdb; /usr/bin/make private_export
+ 0:01.24 cd certhigh; /usr/bin/make private_export
+ 0:01.24 cd pk11wrap; /usr/bin/make private_export
+ 0:01.25 cd cryptohi; /usr/bin/make private_export
+ 0:01.26 There are no private exports.
+ 0:01.26 cd nss; /usr/bin/make private_export
+ 0:01.41 cd ssl; /usr/bin/make private_export
+ 0:01.41 There are no private exports.
+ 0:01.41 cd pkcs7; /usr/bin/make private_export
+ 0:01.42 cd pkcs12; /usr/bin/make private_export
+ 0:01.42 There are no private exports.
+ 0:01.43 cd smime; /usr/bin/make private_export
+ 0:01.45 cd crmf; /usr/bin/make private_export
+ 0:01.46 cd jar; /usr/bin/make private_export
+ 0:01.47 There are no private exports.
+ 0:01.47 cd ckfw; /usr/bin/make private_export
+ 0:01.48 cd builtins; /usr/bin/make private_export
+ 0:01.48 There are no private exports.
+ 0:01.48 There are no private exports.
+ 0:01.50 cd util; /usr/bin/make export
+ 0:01.51 Creating /home/fischer/Projects/gecko/objdir-front-end/dist/include/nss
+ 0:01.51 There are no private exports.
+ 0:01.51 cd freebl; /usr/bin/make export
+ 0:01.52 Makefile:630: warning: overriding commands for target `/home/fischer/Projects/gecko/objdir-front-end/security/nss/lib/freebl'
+ 0:01.52 Makefile:617: warning: ignoring old commands for target `/home/fischer/Projects/gecko/objdir-front-end/security/nss/lib/freebl'
+ 0:01.52 There are no private exports.
+ 0:01.52 cd dbm; /usr/bin/make export
+ 0:01.52 cd include; /usr/bin/make export
+ 0:01.53 Creating /home/fischer/Projects/gecko/objdir-front-end/dist/include/dbm
+ 0:01.53 There are no private exports.
+ 0:01.53 cd src; /usr/bin/make export
+ 0:01.55 cd softoken; /usr/bin/make export
+ 0:01.55 cd legacydb; /usr/bin/make export
+ 0:01.55 cd legacydb; /usr/bin/make private_export
+ 0:01.56 There are no private exports.
+ 0:01.56 There are no private exports.
+ 0:01.56 There are no private exports.
+ 0:01.56 cd base; /usr/bin/make export
+ 0:01.57 There are no private exports.
+ 0:01.57 cd dev; /usr/bin/make export
+ 0:01.57 There are no private exports.
+ 0:01.57 cd pki; /usr/bin/make export
+ 0:01.58 There are no private exports.
+ 0:01.58 cd libpkix; /usr/bin/make export
+ 0:01.59 cd include; /usr/bin/make export
+ 0:01.59 cd include; /usr/bin/make private_export
+ 0:01.60 There are no private exports.
+ 0:01.60 There are no private exports.
+ 0:01.60 cd pkix; /usr/bin/make export
+ 0:01.60 cd pkix; /usr/bin/make private_export
+ 0:01.61 cd certsel; /usr/bin/make export
+ 0:01.61 cd certsel; /usr/bin/make private_export
+ 0:01.61 cd certsel; /usr/bin/make private_export
+ 0:01.61 There are no private exports.
+ 0:01.61 There are no private exports.
+ 0:01.61 There are no private exports.
+ 0:01.61 cd crlsel; /usr/bin/make private_export
+ 0:01.61 cd crlsel; /usr/bin/make export
+ 0:01.61 cd crlsel; /usr/bin/make private_export
+ 0:01.62 There are no private exports.
+ 0:01.62 There are no private exports.
+ 0:01.62 There are no private exports.
+ 0:01.62 cd checker; /usr/bin/make private_export
+ 0:01.62 cd checker; /usr/bin/make private_export
+ 0:01.62 cd checker; /usr/bin/make export
+ 0:01.63 There are no private exports.
+ 0:01.63 There are no private exports.
+ 0:01.63 There are no private exports.
+ 0:01.63 cd params; /usr/bin/make private_export
+ 0:01.63 cd params; /usr/bin/make private_export
+ 0:01.63 cd params; /usr/bin/make export
+ 0:01.64 There are no private exports.
+ 0:01.64 There are no private exports.
+ 0:01.64 There are no private exports.
+ 0:01.64 cd results; /usr/bin/make private_export
+ 0:01.64 cd results; /usr/bin/make private_export
+ 0:01.64 cd results; /usr/bin/make export
+ 0:01.65 There are no private exports.
+ 0:01.65 There are no private exports.
+ 0:01.65 There are no private exports.
+ 0:01.65 cd store; /usr/bin/make private_export
+ 0:01.65 cd store; /usr/bin/make export
+ 0:01.65 cd store; /usr/bin/make private_export
+ 0:01.65 There are no private exports.
+ 0:01.65 There are no private exports.
+ 0:01.65 There are no private exports.
+ 0:01.65 cd top; /usr/bin/make private_export
+ 0:01.65 cd top; /usr/bin/make export
+ 0:01.65 cd top; /usr/bin/make private_export
+ 0:01.66 There are no private exports.
+ 0:01.66 There are no private exports.
+ 0:01.66 There are no private exports.
+ 0:01.66 cd util; /usr/bin/make private_export
+ 0:01.66 cd util; /usr/bin/make export
+ 0:01.66 cd util; /usr/bin/make private_export
+ 0:01.67 There are no private exports.
+ 0:01.67 There are no private exports.
+ 0:01.67 There are no private exports.
+ 0:01.67 There are no private exports.
+ 0:01.67 There are no private exports.
+ 0:01.67 cd pkix_pl_nss; /usr/bin/make private_export
+ 0:01.67 cd pkix_pl_nss; /usr/bin/make export
+ 0:01.68 cd pki; /usr/bin/make private_export
+ 0:01.68 cd pki; /usr/bin/make export
+ 0:01.68 cd pki; /usr/bin/make private_export
+ 0:01.69 There are no private exports.
+ 0:01.69 cd system; /usr/bin/make export
+ 0:01.69 There are no private exports.
+ 0:01.69 cd system; /usr/bin/make private_export
+ 0:01.69 There are no private exports.
+ 0:01.69 cd system; /usr/bin/make private_export
+ 0:01.70 There are no private exports.
+ 0:01.70 There are no private exports.
+ 0:01.70 cd module; /usr/bin/make export
+ 0:01.70 There are no private exports.
+ 0:01.70 cd module; /usr/bin/make private_export
+ 0:01.70 cd module; /usr/bin/make private_export
+ 0:01.70 There are no private exports.
+ 0:01.70 There are no private exports.
+ 0:01.70 There are no private exports.
+ 0:01.70 There are no private exports.
+ 0:01.70 There are no private exports.
+ 0:01.70 There are no private exports.
+ 0:01.71 cd certdb; /usr/bin/make export
+ 0:01.71 There are no private exports.
+ 0:01.71 cd certhigh; /usr/bin/make export
+ 0:01.72 There are no private exports.
+ 0:01.72 cd pk11wrap; /usr/bin/make export
+ 0:01.73 There are no private exports.
+ 0:01.73 cd cryptohi; /usr/bin/make export
+ 0:01.74 There are no private exports.
+ 0:01.74 cd nss; /usr/bin/make export
+ 0:01.88 There are no private exports.
+ 0:01.88 cd ssl; /usr/bin/make export
+ 0:01.88 There are no private exports.
+ 0:01.88 cd pkcs7; /usr/bin/make export
+ 0:01.90 cd pkcs12; /usr/bin/make export
+ 0:01.90 cd smime; /usr/bin/make export
+ 0:01.93 cd crmf; /usr/bin/make export
+ 0:01.94 There are no private exports.
+ 0:01.94 cd jar; /usr/bin/make export
+ 0:01.94 cd ckfw; /usr/bin/make export
+ 0:01.95 cd builtins; /usr/bin/make export
+ 0:01.95 cd builtins; /usr/bin/make private_export
+ 0:01.96 There are no private exports.
+ 0:01.96 There are no private exports.
+ 0:03.19 cd util; /usr/bin/make libs
+ 0:03.20 cd freebl; /usr/bin/make libs
+ 0:03.20 Makefile:630: warning: overriding commands for target `/home/fischer/Projects/gecko/objdir-front-end/security/nss/lib/freebl'
+ 0:03.20 Makefile:617: warning: ignoring old commands for target `/home/fischer/Projects/gecko/objdir-front-end/security/nss/lib/freebl'
+ 0:03.21 mkdir: cannot create directory ‘/home/fischer/Projects/gecko/objdir-front-end/security/nss/lib/freebl’: File exists
+ 0:03.22 cd dbm; /usr/bin/make libs
+ 0:03.24 cd include; /usr/bin/make libs
+ 0:03.24 cd src; /usr/bin/make libs
+ 0:03.25 cd softoken; /usr/bin/make libs
+ 0:03.26 cd legacydb; /usr/bin/make libs
+ 0:03.27 cd base; /usr/bin/make libs
+ 0:03.27 cd dev; /usr/bin/make libs
+ 0:03.28 cd pki; /usr/bin/make libs
+ 0:03.30 cd libpkix; /usr/bin/make libs
+ 0:03.30 cd include; /usr/bin/make libs
+ 0:03.31 cd pkix; /usr/bin/make libs
+ 0:03.31 cd certsel; /usr/bin/make libs
+ 0:03.33 cd crlsel; /usr/bin/make libs
+ 0:03.33 cd checker; /usr/bin/make libs
+ 0:03.33 cd params; /usr/bin/make libs
+ 0:03.35 cd results; /usr/bin/make libs
+ 0:03.35 cd store; /usr/bin/make libs
+ 0:03.37 cd top; /usr/bin/make libs
+ 0:03.37 cd util; /usr/bin/make libs
+ 0:03.38 cd pkix_pl_nss; /usr/bin/make libs
+ 0:03.38 cd pki; /usr/bin/make libs
+ 0:03.40 cd system; /usr/bin/make libs
+ 0:03.40 cd module; /usr/bin/make libs
+ 0:03.41 cd certdb; /usr/bin/make libs
+ 0:03.42 cd certhigh; /usr/bin/make libs
+ 0:03.42 cd pk11wrap; /usr/bin/make libs
+ 0:03.44 cd cryptohi; /usr/bin/make libs
+ 0:03.44 cd nss; /usr/bin/make libs
+ 0:03.50 firefox
+ 0:03.60 cd ssl; /usr/bin/make libs
+ 0:03.61 cd pkcs7; /usr/bin/make libs
+ 0:03.61 cd pkcs12; /usr/bin/make libs
+ 0:03.62 cd smime; /usr/bin/make libs
+ 0:03.64 cd crmf; /usr/bin/make libs
+ 0:03.66 cd jar; /usr/bin/make libs
+ 0:03.66 cd ckfw; /usr/bin/make libs
+ 0:03.67 cd builtins; /usr/bin/make libs
+ 0:03.69 cd mangle; /usr/bin/make libs
+ 0:10.39 libdom_events.a.desc
+ 0:10.44 libxul_s.a.desc
+ 0:10.44 libxul.so
+ 0:22.81 ../../build/unix/gold/ld: warning: hidden symbol 'pixman_filter_create_separable_convolution' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/cairo/libpixman/src/pixman-filter.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libcairo.so
+ 0:22.81 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_destroy' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.81 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_tags_from_script' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src1.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_set_script' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_layout_language_get_feature_tags' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_v_advance_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_tag_to_script' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src1.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_get_length' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_set_ppem' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_get_direction' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_h_kerning_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_layout_script_find_language' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_extents_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_set_scale' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_get_glyph_infos' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_reverse' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_add_utf8' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_reset' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_create' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_create' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_layout_table_get_script_tags' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_set_flags' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_destroy' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_set_language' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_v_origin_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_get_glyph_positions' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_layout_language_get_required_feature_index' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_language_to_string' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/hb-common.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_set_funcs' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_h_origin_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_tag_from_string' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/hb-common.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_tag_from_language' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src1.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_contour_point_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_font_funcs_set_glyph_h_advance_func' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_layout_script_get_language_tags' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_layout_table_find_script' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_language_from_string' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/hb-common.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_face_destroy' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_add' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_layout_language_find_feature' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_ot_tag_to_language' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src1.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_shape' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src1.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_set_direction' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_set_unicode_funcs' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:22.82 ../../build/unix/gold/ld: warning: hidden symbol 'hb_buffer_create' in /home/fischer/Projects/gecko/objdir-front-end/toolkit/library/../../gfx/harfbuzz/src/Unified_cpp_gfx_harfbuzz_src0.o is referenced by DSO /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/libpangoft2-1.0.so
+ 0:23.57 dependentlibs.list
+ 0:24.41 Exporting extension to author-email.xpi.
+ 0:24.55 Exporting extension to addon-manager.xpi.
+ 0:24.63 Exporting extension to chrome.xpi.
+ 0:24.84 Exporting extension to developers.xpi.
+ 0:24.84 Exporting extension to contributors.xpi.
+ 0:24.85 Exporting extension to child_process.xpi.
+ 0:24.92 Warning: missing module: ./toolkit-require-reload-child
+ 0:24.96 Exporting extension to curly-id.xpi.
+ 0:25.12 /home/fischer/Projects/gecko/addon-sdk/source/python-lib/cuddlefish/xpi.py:22: UserWarning: Duplicate name: 'locale/'
+ 0:25.12   zf.writestr(dirinfo, "")
+ 0:25.12 Exporting extension to e10s-l10n.xpi.
+ 0:25.32 Exporting extension to content-permissions.xpi.
+ 0:25.34 Warning: missing module: sdk/widget
+ 0:25.34 Exporting extension to e10s-remote.xpi.
+ 0:25.35 Exporting extension to content-script-messages-latency.xpi.
+ 0:25.35 Warning: missing module: widget
+ 0:25.39 Exporting extension to main.xpi.
+ 0:25.41 Exporting extension to name-in-numbers.xpi.
+ 0:25.45 Exporting extension to e10s.xpi.
+ 0:25.47 Exporting extension to name-in-numbers-plus.xpi.
+ 0:25.50 Exporting extension to l10n.xpi.
+ 0:25.54 Exporting extension to packed.xpi.
+ 0:25.56 Exporting extension to packaging.xpi.
+ 0:25.58 Exporting extension to l10n-properties.xpi.
+ 0:25.58 Exporting extension to e10s-tabs.xpi.
+ 0:25.60 Exporting extension to predefined-id-with-at.xpi.
+ 0:25.66 Exporting extension to preferences-branch.xpi.
+ 0:25.66 Exporting extension to e10s-content.xpi.
+ 0:25.68 Exporting extension to remote.xpi.
+ 0:25.68 Exporting extension to page-mod-debugger-post.xpi.
+ 0:25.74 Exporting extension to page-mod-debugger-pre.xpi.
+ 0:25.75 Exporting extension to self.xpi.
+ 0:25.75 Exporting extension to simple-prefs-l10n.xpi.
+ 0:25.77 Exporting extension to page-worker.xpi.
+ 0:25.78 Exporting extension to unsafe-content-script.xpi.
+ 0:25.79 Exporting extension to simple-prefs.xpi.
+ 0:25.80 Exporting extension to standard-id.xpi.
+ 0:25.80 Exporting extension to require.xpi.
+ 0:25.80 Exporting extension to layout-change.xpi.
+ 0:25.81 Exporting extension to tab-close-on-startup.xpi.
+ 0:25.82 Exporting extension to simple-prefs-regression.xpi.
+ 0:25.83 Exporting extension to toolkit-require-reload.xpi.
+ 0:25.83 Exporting extension to translators.xpi.
+ 0:25.86 Exporting extension to private-browsing-supported.xpi.
+ 0:25.87 Exporting extension to places.xpi.
+ 0:27.06   adding: install.rdf (deflated 52%)
+ 0:27.08   adding: plugins/libnptest.so (deflated 62%)
+ 0:27.09   adding: plugins/libnpsecondtest.so (deflated 62%)
+ 0:27.11   adding: plugins/libnpthirdtest.so (deflated 62%)
+ 0:27.13   adding: plugins/libnpswftest.so (deflated 62%)
+ 0:27.15   adding: plugins/libnpctrltest.so (deflated 62%)
+ 0:34.08 Packaging specialpowers@mozilla.org.xpi...
+ 0:34.16 Packaging quitter@mozilla.org.xpi...
+ 0:34.22 Packaging mozscreenshots@mozilla.org.xpi...
+ 0:34.31 1217 compiler warnings present.
+ 0:34.39 Your build was successful!
+To view resource usage of the build, run |mach resource-usage|.
+To take your build for a test drive, run: |mach run|
+For more information on what to do now, see https://developer.mozilla.org/docs/Developer_Guide/So_You_Just_Built_Firefox
+ 0:00.06 /home/fischer/Projects/gecko/objdir-front-end/dist/bin/firefox -no-remote -profile /home/fischer/Projects/gecko/objdir-front-end/tmp/scratch_user
+
+(firefox:25218): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(firefox:25218): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(firefox:25218): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(firefox:25218): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+ATTENTION: default value of option force_s3tc_enable overridden by environment.
+ATTENTION: default value of option force_s3tc_enable overridden by environment.
+ATTENTION: default value of option force_s3tc_enable overridden by environment.
+
+(/home/fischer/Projects/gecko/objdir-front-end/dist/bin/plugin-container:25266): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(/home/fischer/Projects/gecko/objdir-front-end/dist/bin/plugin-container:25266): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(/home/fischer/Projects/gecko/objdir-front-end/dist/bin/plugin-container:25266): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(/home/fischer/Projects/gecko/objdir-front-end/dist/bin/plugin-container:25266): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = verifiedManage
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = suggestionsInSearchFieldsCheckbox
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = urlBarSuggestion
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = redirectSearchCheckbox
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = restoreDefaultSearchEngines
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = removeEngineButton
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = ctrlTabRecentlyUsedOrder
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = linkTargeting
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = switchToNewTabs
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = saveTo
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = chooseFolder
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = alwaysAsk
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = alwaysCheckDefault
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = setDefaultButton
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = useCurrent
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = useBookmark
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = restoreDefaultHomePage
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = noFxaSignUp
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = noFxaSignIn
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = bugzilla
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = fxaUnlinkButton
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = verifyFxaAccount
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = unverifiedUnlinkFxaAccount
+TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = rejectUnlinkFxaAccount
+
+TMP_FISCHER>>> EventStateManager::ExecuteAccessKey
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - focused content id = categories
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = verifiedManage
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = noFxaSignUp
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = noFxaSignIn
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = bugzilla
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = fxaUnlinkButton
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = verifyFxaAccount
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = unverifiedUnlinkFxaAccount
+TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = rejectUnlinkFxaAccount
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = verifiedManage
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = o
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = n
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = A
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = A
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = m
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = m
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = P
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = P
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = S
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = S
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = r
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = r
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = T
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = T
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = c
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = noFxaSignUp
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = C
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = noFxaSignIn
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = I
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = bugzilla
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 2
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = fxaUnlinkButton
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = D
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = verifyFxaAccount
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = V
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = unverifiedUnlinkFxaAccount
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = F
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = rejectUnlinkFxaAccount
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = e
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = T
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = T
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = m
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = m
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = P
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = P
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = r
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = r
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = A
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = A
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - Not XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = S
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = S
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - XUL Label
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = c
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = 1
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = z
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = true
+TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = false
+
+TMP_FISCHER>>> nsXULElement::PerformAccesskey

@@ -30,6 +30,8 @@ class nsIScrollableFrame;
 class nsITimer;
 class nsPresContext;
 
+class nsTextFragment;
+
 namespace mozilla {
 
 class EnterLeaveDispatcher;

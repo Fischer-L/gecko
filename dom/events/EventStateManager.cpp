@@ -100,6 +100,8 @@
 #import <ApplicationServices/ApplicationServices.h>
 #endif
 
+#include "nsTextFragment.h"
+
 namespace mozilla {
 
 using namespace dom;
@@ -913,47 +915,85 @@ EventStateManager::GetAccessModifierMaskFor(nsISupports* aDocShell)
 static bool
 IsAccessKeyTarget(nsIContent* aContent, nsIFrame* aFrame, nsAString& aKey)
 {
+  // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - %s\n", aContent->IsXULElement(nsGkAtoms::label) ? "XUL Label" : "Not XUL Label");
   // Use GetAttr because we want Unicode case=insensitive matching
   // XXXbz shouldn't this be case-sensitive, per spec?
   nsString contentKey;
-  if (!aContent->GetAttr(kNameSpaceID_None, nsGkAtoms::accesskey, contentKey) ||
-      !contentKey.Equals(aKey, nsCaseInsensitiveStringComparator()))
+  bool TMP_GetAttr_bool = aContent->GetAttr(kNameSpaceID_None, nsGkAtoms::accesskey, contentKey);
+  // TMP _KEY_: <label class="text-link"> would get false here so accesskey doesn't work
+  bool TMP_contentKey_Equals = contentKey.Equals(aKey, nsCaseInsensitiveStringComparator());
+  
+  // nsString TMP_id;
+  // bool TMP_GetAttr_id = aContent->GetAttr(kNameSpaceID_None, nsGkAtoms::id, TMP_id);
+  // if (TMP_GetAttr_id) {
+  //   NS_ConvertUTF16toUTF8 TMP_contentID(TMP_id);   
+  //   fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - content id = %s\n", TMP_contentID.get());
+  // }
+
+  // NS_ConvertUTF16toUTF8 TMP_contentKey(contentKey);
+  // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey.Length = %d\n", TMP_contentKey.Length());
+  // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - contentKey = %s\n", TMP_contentKey.get());
+  
+  // NS_ConvertUTF16toUTF8 TMP_aKey(aKey);
+  // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey.Length = %d\n", aKey.Length());
+  // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - aKey = %s\n", TMP_aKey.get());
+
+  // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_GetAttr_bool = %s\n", TMP_GetAttr_bool ? "true" : "false");
+  // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - TMP_contentKey_Equals = %s\n", TMP_contentKey_Equals ? "true" : "false");
+  if (!TMP_GetAttr_bool ||
+      !TMP_contentKey_Equals) {
+    // fprintf(stderr, "\n");
     return false;
+  }
 
   nsCOMPtr<nsIDOMXULDocument> xulDoc =
     do_QueryInterface(aContent->OwnerDoc());
-  if (!xulDoc && !aContent->IsXULElement())
+  if (!xulDoc && !aContent->IsXULElement()) {
+    fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 0\n");
     return true;
+  }
 
     // For XUL we do visibility checks.
-  if (!aFrame)
+  if (!aFrame) {
+    fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 1\n");
     return false;
+  }
 
-  if (aFrame->IsFocusable())
+  if (aFrame->IsFocusable()) {
+    // TMP _KEY_: xul:label.text-link returns at here
+    // fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 2\n");
     return true;
+  }
 
-  if (!aFrame->IsVisibleConsideringAncestors())
+  if (!aFrame->IsVisibleConsideringAncestors()) {
+    fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 3\n");
     return false;
+  }
 
   // XUL controls can be activated.
   nsCOMPtr<nsIDOMXULControlElement> control(do_QueryInterface(aContent));
-  if (control)
+  if (control) {
+    fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 4\n");
     return true;
+  }
 
   // HTML area, label and legend elements are never focusable, so
   // we need to check for them explicitly before giving up.
   if (aContent->IsAnyOfHTMLElements(nsGkAtoms::area,
                                     nsGkAtoms::label,
                                     nsGkAtoms::legend)) {
+    fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 5\n");
     return true;
   }
 
   // XUL label elements are never focusable, so we need to check for them
   // explicitly before giving up.
   if (aContent->IsXULElement(nsGkAtoms::label)) {
+    fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 7\n");
     return true;
   }
 
+    fprintf(stderr, "TMP_FISCHER>>> EventStateManager - IsAccessKeyTarget - return at 8\n");
   return false;
 }
 
@@ -961,6 +1001,8 @@ bool
 EventStateManager::ExecuteAccessKey(nsTArray<uint32_t>& aAccessCharCodes,
                                     bool aIsTrustedEvent)
 {
+
+  fprintf(stderr, "\nTMP_FISCHER>>> EventStateManager::ExecuteAccessKey\n");
   int32_t count, start = -1;
   nsIContent* focusedContent = GetFocusedContent();
   if (focusedContent) {
@@ -968,7 +1010,31 @@ EventStateManager::ExecuteAccessKey(nsTArray<uint32_t>& aAccessCharCodes,
     if (start == -1 && focusedContent->GetBindingParent())
       start = mAccessKeys.IndexOf(focusedContent->GetBindingParent());
   }
+
+
   nsIContent *content;
+  
+  // TMP
+  // nsString TMP_id;
+  // bool TMP_GetAttr_id;
+  // if (focusedContent) {
+  //     TMP_GetAttr_id = focusedContent->GetAttr(kNameSpaceID_None, nsGkAtoms::id, TMP_id);
+  //     if (TMP_GetAttr_id) {
+  //       NS_ConvertUTF16toUTF8 TMP_focused_contentID(TMP_id);   
+  //       fprintf(stderr, "TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - focused content id = %s\n", TMP_focused_contentID.get());
+  //     }
+  // }
+  // int32_t TMP_len = mAccessKeys.Count();
+  // for (count = 0; count < TMP_len; ++count) {
+  //     content = mAccessKeys[count];
+  //     TMP_GetAttr_id = content->GetAttr(kNameSpaceID_None, nsGkAtoms::id, TMP_id);
+  //     if (TMP_GetAttr_id) {
+  //       NS_ConvertUTF16toUTF8 TMP_contentID(TMP_id);   
+  //       fprintf(stderr, "TMP_FISCHER>>> EventStateManager - ExecuteAccessKey - content id = %s\n", TMP_contentID.get());
+  //     }
+  // }
+  // TMP end
+
   nsIFrame *frame;
   int32_t length = mAccessKeys.Count();
   for (uint32_t i = 0; i < aAccessCharCodes.Length(); ++i) {
@@ -5080,8 +5146,16 @@ EventStateManager::EventStatusOK(WidgetGUIEvent* aEvent)
 void
 EventStateManager::RegisterAccessKey(nsIContent* aContent, uint32_t aKey)
 {
-  if (aContent && mAccessKeys.IndexOf(aContent) == -1)
+  if (aContent && mAccessKeys.IndexOf(aContent) == -1) {
+    // TMP
+      nsString TMP_id;
+      bool TMP_GetAttr_id = aContent->GetAttr(kNameSpaceID_None, nsGkAtoms::id, TMP_id);
+      if (TMP_GetAttr_id) {
+        NS_ConvertUTF16toUTF8 TMP_contentID(TMP_id);   
+        fprintf(stderr, "TMP_FISCHER>>> EventStateManager - RegisterAccessKey - content id = %s\n", TMP_contentID.get());
+      }
     mAccessKeys.AppendObject(aContent);
+  }
 }
 
 void

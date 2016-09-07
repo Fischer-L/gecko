@@ -614,30 +614,91 @@ nsXULElement::PerformAccesskey(bool aKeyCausesActivation,
 {
     nsCOMPtr<nsIContent> content(this);
 
-    if (IsXULElement(nsGkAtoms::label)) {
-        nsCOMPtr<nsIDOMElement> element;
+    
+    fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey\n");
+    
+    nsString TMP_id;
+    bool TMP_GetAttr_id = GetAttr(kNameSpaceID_None, nsGkAtoms::id, TMP_id);
+    if (TMP_GetAttr_id) {
+      NS_ConvertUTF16toUTF8 TMP_contentID(TMP_id);   
+      fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - elem id = %s\n", TMP_contentID.get());
+    }
 
-        nsAutoString control;
-        GetAttr(kNameSpaceID_None, nsGkAtoms::control, control);
-        if (!control.IsEmpty()) {
+    if (IsXULElement(nsGkAtoms::label)) {
+        fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - label\n");
+        // nsCOMPtr<nsIDOMElement> element;
+
+        // nsAutoString control;
+        // GetAttr(kNameSpaceID_None, nsGkAtoms::control, control);
+        // if (!control.IsEmpty()) {
+        //     //XXXsmaug Should we use ShadowRoot::GetElementById in case
+        //     //         content is in Shadow DOM?
+        //     nsCOMPtr<nsIDOMDocument> domDocument =
+        //         do_QueryInterface(content->GetUncomposedDoc());
+        //     if (domDocument)
+        //         domDocument->GetElementById(control, getter_AddRefs(element));
+        // }
+
+        // // here we'll either change |content| to the element referenced by
+        // // |element|, or clear it.
+        // content = do_QueryInterface(element);
+
+        // if (!content) {
+        //     fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - no content\n");
+        //     return false;
+        // }
+
+        // TMP _KEY_
+
+        nsAutoString attrValue;
+
+        // For <label control="...">
+        if (GetAttr(kNameSpaceID_None, nsGkAtoms::control, attrValue) && !attrValue.IsEmpty()) {
+            nsCOMPtr<nsIDOMElement> element;
             //XXXsmaug Should we use ShadowRoot::GetElementById in case
             //         content is in Shadow DOM?
             nsCOMPtr<nsIDOMDocument> domDocument =
                 do_QueryInterface(content->GetUncomposedDoc());
-            if (domDocument)
-                domDocument->GetElementById(control, getter_AddRefs(element));
+            if (domDocument) {
+                domDocument->GetElementById(attrValue, getter_AddRefs(element));
+            }
+            // here we'll either change |content| to the element referenced by
+            // |element|, or clear it.
+            content = do_QueryInterface(element);
         }
-        // here we'll either change |content| to the element referenced by
-        // |element|, or clear it.
-        content = do_QueryInterface(element);
+        // For <label class="text-link" href="...">
+        else if (GetAttr(kNameSpaceID_None, nsGkAtoms::href, attrValue) && !attrValue.IsEmpty()) {
+          NS_ConvertUTF16toUTF8 TMP_url(attrValue);
+          fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - label href = %s\n", TMP_url.get());
 
+          nsAutoString textLinkSelector;
+          textLinkSelector.AssignASCII(" text-link ");
+          GetAttr(kNameSpaceID_None, nsGkAtoms::_class, attrValue);
+          NS_ConvertUTF16toUTF8 classValue(attrValue);
+          classValue.Append(" ");
+          fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - textLinkSelector = %s\n", textLinkSelector.get());
+          fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - classValue = %s\n", classValue.get());
+          fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - label class = %d\n", attrValue.Find(textLinkSelector));
+          // For <label class="text-link" href="...">, the acesskey's target content would be the current content itself
+          // so we do nothing to keep content as the current one.
+          // And label text-link binding only works on label with text-link class selector. See toolkit/content/minimal-xul.css and toolkit/content/widgets/text.xml.
+
+        } else {
+            fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - rest other label\n");
+          // For the rest types of label, no accesskey function so set the content to null
+          content = 0;
+        }
+        
         if (!content) {
+            fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - no content\n");
             return false;
         }
+        // TMP _KEY_ end
     }
 
     nsIFrame* frame = content->GetPrimaryFrame();
     if (!frame || !frame->IsVisibleConsideringAncestors()) {
+        fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - no frame or frame invisible\n");
         return false;
     }
 
@@ -646,6 +707,7 @@ nsXULElement::PerformAccesskey(bool aKeyCausesActivation,
     if (elm) {
         // Define behavior for each type of XUL element.
         if (!content->IsXULElement(nsGkAtoms::toolbarbutton)) {
+          fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - have elm #1\n");
           nsIFocusManager* fm = nsFocusManager::GetFocusManager();
           if (fm) {
             nsCOMPtr<nsIDOMElement> elementToFocus;
@@ -665,6 +727,7 @@ nsXULElement::PerformAccesskey(bool aKeyCausesActivation,
               elementToFocus = do_QueryInterface(content);
             }
             if (elementToFocus) {
+              fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - have elm #1 - focus elementToFocus\n");
               fm->SetFocus(elementToFocus, nsIFocusManager::FLAG_BYKEY);
 
               // Return true if the element became focused.
@@ -675,12 +738,15 @@ nsXULElement::PerformAccesskey(bool aKeyCausesActivation,
         }
         if (aKeyCausesActivation &&
             !content->IsAnyOfXULElements(nsGkAtoms::textbox, nsGkAtoms::menulist)) {
+          fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - have elm #2\n");
           elm->ClickWithInputSource(nsIDOMMouseEvent::MOZ_SOURCE_KEYBOARD, aIsTrustedEvent);
         }
     } else {
+        fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - no elem\n");
         return content->PerformAccesskey(aKeyCausesActivation, aIsTrustedEvent);
     }
 
+        fprintf(stderr, "TMP_FISCHER>>> nsXULElement::PerformAccesskey - focused = %s\n", focused ? "true" : "false");
     return focused;
 }
 
@@ -1765,12 +1831,14 @@ nsXULElement::ClickWithInputSource(uint16_t aInputSource, bool aIsTrustedEvent)
             // If the click has been prevented, lets skip the command call
             // this is how a physical click works
             if (status == nsEventStatus_eConsumeNoDefault) {
+                fprintf(stderr, "TMP_FISCHER>>> nsXULElement::ClickWithInputSource - click default prevented\n");
                 return NS_OK;
             }
         }
     }
 
     // oncommand is fired when an element is clicked...
+    fprintf(stderr, "TMP_FISCHER>>> nsXULElement::ClickWithInputSource - doing command\n");
     return DoCommand();
 }
 

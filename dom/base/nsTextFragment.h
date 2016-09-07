@@ -138,14 +138,17 @@ public:
   MOZ_MUST_USE
   bool AppendTo(nsAString& aString,
                 const mozilla::fallible_t& aFallible) const {
+      // fprintf(stderr, "TMP_FISCHER>>> nsTextFragment.h - AppendTo #1\n");
     if (mState.mIs2b) {
       bool ok = aString.Append(m2b, mState.mLength, aFallible);
+      // fprintf(stderr, "TMP_FISCHER>>> nsTextFragment.h - AppendTo #1 - in mState.mIs2b\n");
       if (!ok) {
         return false;
       }
 
       return true;
     } else {
+      // fprintf(stderr, "TMP_FISCHER>>> nsTextFragment.h - AppendTo #1 - out mState.mIs2b\n");
       return AppendASCIItoUTF16(Substring(m1b, mState.mLength), aString,
                                 aFallible);
     }

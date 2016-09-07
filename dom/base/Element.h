@@ -594,9 +594,16 @@ protected:
                  "must have a real namespace ID!");
     MOZ_ASSERT(aResult.HasStringBuffer() && aResult.StringBufferLength() == 0,
                "Should have empty string coming in");
+    nsCString TMP_aName;
+    aName->ToUTF8String(TMP_aName);
+    // fprintf(stderr, "TMP_FISCHER>>> Element.h - GetAttr - aName = %s\n", TMP_aName.get());
     const nsAttrValue* val = mAttrsAndChildren.GetAttr(aName, aNameSpaceID);
     if (val) {
       val->ToString(aResult);
+      nsString TMP_s;
+      aResult.ToString(TMP_s);
+      NS_ConvertUTF16toUTF8 TMP_aResult(TMP_s);
+      // fprintf(stderr, "TMP_FISCHER>>> Element.h - GetAttr - aResult = %s\n", TMP_aResult.get());
       return true;
     }
     // else DOMString comes pre-emptied.

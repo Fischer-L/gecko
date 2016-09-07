@@ -2643,6 +2643,7 @@ bool
 Element::GetAttr(int32_t aNameSpaceID, nsIAtom* aName,
                  nsAString& aResult) const
 {
+  // fprintf(stderr, "TMP_FISCHER>>> Element.cpp - GetAttr inside\n");
   DOMString str;
   bool haveAttr = GetAttr(aNameSpaceID, aName, str);
   str.ToString(aResult);

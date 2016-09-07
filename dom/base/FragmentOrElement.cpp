@@ -920,6 +920,7 @@ nsIContent::GetAttr(int32_t aNameSpaceID, nsIAtom* aName,
                     nsAString& aResult) const
 {
   if (IsElement()) {
+    // fprintf(stderr, "TMP_FISCHER>>> FragmentOrElement - GetAttr inside\n");
     return AsElement()->GetAttr(aNameSpaceID, aName, aResult);
   }
   aResult.Truncate();

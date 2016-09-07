@@ -38,8 +38,12 @@ nsXULLabelFrame::RegUnregAccessKey(bool aDoReg)
   // in e.g. <menu>, <menuitem>, <button>. These <label>s inherit
   // |accesskey| and would otherwise register themselves, overwriting
   // the content we really meant to be registered.
-  if (!mContent->HasAttr(kNameSpaceID_None, nsGkAtoms::control))
+  if (!mContent->HasAttr(kNameSpaceID_None, nsGkAtoms::control) &&
+    // To filter out non <label class="text-link" href="...">.
+    // Delay checking of class="text-link" at nsXULElement::PerformAccesskey so not checking twice
+    !mContent->HasAttr(kNameSpaceID_None, nsGkAtoms::href)) {
     return NS_OK;
+  }
 
   nsAutoString accessKey;
   mContent->GetAttr(kNameSpaceID_None, nsGkAtoms::accesskey, accessKey);
@@ -92,7 +96,7 @@ nsXULLabelFrame::AttributeChanged(int32_t aNameSpaceID,
 
   // If the accesskey changed, register for the new value
   // The old value has been unregistered in nsXULElement::SetAttr
-  if (aAttribute == nsGkAtoms::accesskey || aAttribute == nsGkAtoms::control)
+  if (aAttribute == nsGkAtoms::accesskey || aAttribute == nsGkAtoms::control || aAttribute == nsGkAtoms::href)
     RegUnregAccessKey(true);
 
   return rv;

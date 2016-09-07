@@ -2675,6 +2675,8 @@ nsGenericHTMLElement::PerformAccesskey(bool aKeyCausesActivation,
     return false;
   }
 
+  fprintf(stderr, "TMP_FISCHER>>> nsGenericHTMLElement::PerformAccesskey\n");
+
   // It's hard to say what HTML4 wants us to do in all cases.
   bool focused = true;
   nsFocusManager* fm = nsFocusManager::GetFocusManager();
