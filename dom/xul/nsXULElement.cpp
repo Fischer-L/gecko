@@ -615,21 +615,36 @@ nsXULElement::PerformAccesskey(bool aKeyCausesActivation,
     nsCOMPtr<nsIContent> content(this);
 
     if (IsXULElement(nsGkAtoms::label)) {
-        nsCOMPtr<nsIDOMElement> element;
+        nsAutoString attrValue;
 
-        nsAutoString control;
-        GetAttr(kNameSpaceID_None, nsGkAtoms::control, control);
-        if (!control.IsEmpty()) {
+        // For <label control="...">
+        if (GetAttr(kNameSpaceID_None, nsGkAtoms::control, attrValue) && !attrValue.IsEmpty()) {
+            nsCOMPtr<nsIDOMElement> element;
             //XXXsmaug Should we use ShadowRoot::GetElementById in case
             //         content is in Shadow DOM?
             nsCOMPtr<nsIDOMDocument> domDocument =
                 do_QueryInterface(content->GetUncomposedDoc());
-            if (domDocument)
-                domDocument->GetElementById(control, getter_AddRefs(element));
+            if (domDocument) {
+                domDocument->GetElementById(attrValue, getter_AddRefs(element));
+            }
+            // here we'll either change |content| to the element referenced by
+            // |element|, or clear it.
+            content = do_QueryInterface(element);
         }
-        // here we'll either change |content| to the element referenced by
-        // |element|, or clear it.
-        content = do_QueryInterface(element);
+        // For <label class="text-link" href="...">
+        else if (GetAttr(kNameSpaceID_None, nsGkAtoms::href, attrValue) && !attrValue.IsEmpty()) {
+          // TODO: Add checking if having text-link CSS selector
+          // P.S Because label text-link binding only works on label with text-link class selector. See toolkit/content/minimal-xul.css and toolkit/content/widgets/text.xml.
+          // So even if we skip the checking here, nothing happens when acceskey is triggered.
+          // Should we just skip the checking to save some time on checking CSS class selector ?
+          // bool hasTextLinkSelector = true;
+          // if(!hasTextLinkSelector) {
+          //   content = 0;
+          // }
+        } else {
+          // For the rest types of label, no accesskey function so set the content to null
+          content = 0;
+        }
 
         if (!content) {
             return false;
