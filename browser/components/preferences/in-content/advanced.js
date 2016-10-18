@@ -97,6 +97,64 @@ var gAdvancedPane = {
         event.stopPropagation();
       }, true);
     }
+
+    gAdvancedPane.TMP_targetHost = "tw.yahoo.com";
+    gAdvancedPane.TMP_visitEntry = false;
+    gAdvancedPane.TMP_dataSize = gAdvancedPane.TMP_consumption = 0;
+    setEventListener("clearHttpCacheBtn", "command", function () {
+      var memStorage = Services.cache2.memoryCacheStorage(LoadContextInfo.default);
+      var diskStorage = Services.cache2.diskCacheStorage(LoadContextInfo.default, false);
+      var getVisitor = function (tag, targetHost, store) {
+        gAdvancedPane.TMP_dataSize = gAdvancedPane.TMP_consumption = 0;
+        var _targets = [];
+        var visitor = {
+          onCacheStorageInfo: function (entryCount, consumption, capacity, diskDirectory) {
+            gAdvancedPane.TMP_consumption += consumption;
+            console.log("TMP>>> advanced.js - " + tag  + " - onCacheStorageInfo");
+            console.log("entryCount, consumption, capacity, diskDirectory =", entryCount, consumption, capacity, diskDirectory);
+            console.log(" ");
+          },
+          onCacheEntryInfo: function (uri, IdEnhance, dataSize, fetchCount, lastModified, expire, pinned) {
+            if (uri.host === targetHost) {
+              gAdvancedPane.TMP_dataSize += dataSize;
+              _targets.push(uri);
+              console.log("TMP>>> advanced.js - " + tag  + " - onCacheEntryInfo");
+              console.log("host =", uri.host);
+              // console.log("hostPort =", uri.hostPort);
+              // console.log("scheme =", uri.scheme);
+              // console.log("spec =", uri.spec);
+              console.log("IdEnhance = ", IdEnhance);
+              console.log("dataSize = ", dataSize);
+              // console.log("fetchCount = ", fetchCount);
+              // console.log("lastModified = ", lastModified);
+              // console.log("expire = ", expire);
+              // console.log("pinned = ", pinned);
+              console.log(" ");
+            }
+          },
+          onCacheEntryVisitCompleted: function () {
+            console.log("TMP>>> advanced.js - " + tag  + " - onCacheEntryVisitCompleted");
+            return;
+            if (_targets.length > 0) {
+              console.log(tag + " - asyncDoomURI starts");
+              _targets.forEach(uri => {
+                store.asyncDoomURI(uri, "", function () {
+                  console.log(tag + " - asyncDoomURI ends");
+                });
+              });
+            }
+            console.log(" ");
+          }
+        };
+        if (!gAdvancedPane.TMP_visitEntry) {
+          delete visitor.onCacheEntryInfo;
+          delete visitor.onCacheEntryVisitCompleted;
+        }
+        return visitor;
+      };
+      // memStorage.asyncVisitStorage(getVisitor("memStorage", gAdvancedPane.TMP_targetHost, memStorage), gAdvancedPane.TMP_visitEntry);
+      diskStorage.asyncVisitStorage(getVisitor("diskStorage", gAdvancedPane.TMP_targetHost, diskStorage), gAdvancedPane.TMP_visitEntry);
+    });
   },
 
   /**

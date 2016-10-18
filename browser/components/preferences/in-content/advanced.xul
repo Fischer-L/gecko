@@ -328,6 +328,10 @@
           </vbox>
         </hbox>
       </groupbox>
+
+      <groupbox id="TMP_testGroup">
+        <button id="clearHttpCacheBtn" label="Clear HTTP cache" />
+      </groupbox>
     </tabpanel>
 
     <!-- Update -->
