@@ -68,9 +68,6 @@ this.SiteDataManager = {
     this._quotaUsageRequests = [];
     let promises = [];
     for (let [key, site] of this._sites) { // eslint-disable-line no-unused-vars
-      promises.push(new Promise(resolve => {
-        let callback = {
-          onUsageResult: function(request) {
             site.quotaUsage = request.usage;
             resolve();
           }
