@@ -13,8 +13,8 @@
 interface StorageManager {
   // [Throws]
   // Promise<boolean> persisted();
-  // [Throws]
-  // [Exposed=Window] Promise<boolean> persist();
+  [Throws]
+  Promise<boolean> persist();
   [Throws]
   Promise<StorageEstimate> estimate();
 };
@@ -23,3 +23,5 @@ dictionary StorageEstimate {
   unsigned long long usage;
   unsigned long long quota;
 };
+
+enum PersistentStoragePermission { "prompt", "denied", "granted" };

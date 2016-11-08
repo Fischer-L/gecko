@@ -11,6 +11,8 @@
 #include "mozilla/dom/StorageManagerBinding.h"
 #include "mozilla/dom/WorkerPrivate.h"
 #include "mozilla/ErrorResult.h"
+#include "nsContentPermissionHelper.h"
+#include "nsIContentPermissionPrompt.h"
 #include "nsIQuotaCallbacks.h"
 #include "nsIQuotaRequests.h"
 #include "nsPIDOMWindow.h"
@@ -259,6 +261,176 @@ EstimateWorkerMainThreadRunnable::MainThreadRun()
 }
 
 /*******************************************************************************
+ * PersistentStoragePermissionRequest
+ ******************************************************************************/
+
+class PersistentStoragePermissionRequest
+  : public nsIContentPermissionRequest,
+    public nsIRunnable
+{
+public:
+  NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+  NS_DECL_NSICONTENTPERMISSIONREQUEST
+  NS_DECL_NSIRUNNABLE
+  NS_DECL_CYCLE_COLLECTION_CLASS_AMBIGUOUS(PersistentStoragePermissionRequest,
+                                           nsIContentPermissionRequest)
+
+  PersistentStoragePermissionRequest(nsIPrincipal* aPrincipal,
+                           nsPIDOMWindowInner* aWindow, Promise* aPromise)
+    : mPrincipal(aPrincipal), mWindow(aWindow),
+      mPermission(PersistentStoragePermission::Prompt),
+      mPromise(aPromise)
+  {
+    MOZ_ASSERT(aPromise);
+    mRequester = new nsContentPermissionRequester(mWindow);
+  }
+
+protected:
+  virtual ~PersistentStoragePermissionRequest() {}
+
+  nsresult ResolvePromise();
+  nsresult DispatchResolvePromise();
+  nsCOMPtr<nsIPrincipal> mPrincipal;
+  nsCOMPtr<nsPIDOMWindowInner> mWindow;
+  PersistentStoragePermission mPermission;
+  RefPtr<Promise> mPromise;
+  nsCOMPtr<nsIContentPermissionRequester> mRequester;
+};
+
+NS_IMPL_CYCLE_COLLECTION(PersistentStoragePermissionRequest, mWindow, mPromise)
+
+NS_INTERFACE_MAP_BEGIN_CYCLE_COLLECTION(PersistentStoragePermissionRequest)
+  NS_INTERFACE_MAP_ENTRY(nsIContentPermissionRequest)
+  NS_INTERFACE_MAP_ENTRY(nsIRunnable)
+  NS_INTERFACE_MAP_ENTRY_AMBIGUOUS(nsISupports, nsIContentPermissionRequest)
+NS_INTERFACE_MAP_END
+
+NS_IMPL_CYCLE_COLLECTING_ADDREF(PersistentStoragePermissionRequest)
+NS_IMPL_CYCLE_COLLECTING_RELEASE(PersistentStoragePermissionRequest)
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::Run()
+{
+  if (nsContentUtils::IsSystemPrincipal(mPrincipal)) {
+    mPermission = PersistentStoragePermission::Granted;
+  } else {
+    // File are automatically granted permission.
+    nsCOMPtr<nsIURI> uri;
+    mPrincipal->GetURI(getter_AddRefs(uri));
+
+    if (uri) {
+      bool isFile;
+      uri->SchemeIs("file", &isFile);
+      if (isFile) {
+        mPermission = PersistentStoragePermission::Granted;
+      }
+    }
+  }
+
+  // Grant permission if pref'ed on.
+  if (Preferences::GetBool("storage.prompt.testing", false)) {
+    if (Preferences::GetBool("storage.prompt.testing.allow", true)) {
+      mPermission = PersistentStoragePermission::Granted;
+    } else {
+      mPermission = PersistentStoragePermission::Denied;
+    }
+  }
+
+  if (mPermission != PersistentStoragePermission::Prompt) {
+    return DispatchResolvePromise();
+  }
+
+  return nsContentPermissionUtils::AskPermission(this, mWindow);
+}
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::GetPrincipal(nsIPrincipal** aRequestingPrincipal)
+{
+  NS_ADDREF(*aRequestingPrincipal = mPrincipal);
+  return NS_OK;
+}
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::GetWindow(mozIDOMWindow** aRequestingWindow)
+{
+  NS_ADDREF(*aRequestingWindow = mWindow);
+  return NS_OK;
+}
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::GetElement(nsIDOMElement** aElement)
+{
+  NS_ENSURE_ARG_POINTER(aElement);
+  *aElement = nullptr;
+  return NS_OK;
+}
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::Cancel()
+{
+  // `Cancel` is called if the user denied permission or dismissed the
+  // permission request. To distinguish between the two, we set the
+  // permission to "default" and query the permission manager in
+  // `ResolvePromise`.
+  mPermission = PersistentStoragePermission::Prompt;
+  return DispatchResolvePromise();
+}
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::Allow(JS::HandleValue aChoices)
+{
+  MOZ_ASSERT(aChoices.isUndefined());
+
+  mPermission = PersistentStoragePermission::Granted;
+
+  return DispatchResolvePromise();
+}
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::GetRequester(nsIContentPermissionRequester** aRequester)
+{
+  NS_ENSURE_ARG_POINTER(aRequester);
+
+  nsCOMPtr<nsIContentPermissionRequester> requester = mRequester;
+  requester.forget(aRequester);
+
+  return NS_OK;
+}
+
+inline nsresult
+PersistentStoragePermissionRequest::DispatchResolvePromise()
+{
+  return NS_DispatchToMainThread(NewRunnableMethod(this,
+           &PersistentStoragePermissionRequest::ResolvePromise));
+}
+
+nsresult
+PersistentStoragePermissionRequest::ResolvePromise()
+{
+  nsresult rv = NS_OK;
+  if (mPermission == PersistentStoragePermission::Prompt) {
+    // This will still be "default" if the user dismissed the doorhanger,
+    // or "denied" otherwise.
+    // XXX
+    //mPermission = Notification::TestPermission(mPrincipal);
+  }
+
+  mPromise->MaybeResolve(mPermission);
+  return rv;
+}
+
+NS_IMETHODIMP
+PersistentStoragePermissionRequest::GetTypes(nsIArray** aTypes)
+{
+  nsTArray<nsString> emptyOptions;
+
+  return nsContentPermissionUtils::CreatePermissionArray(NS_LITERAL_CSTRING("persistent-storage"),
+                                                         NS_LITERAL_CSTRING("unused"),
+                                                         emptyOptions,
+                                                         aTypes);
+}
+
+/*******************************************************************************
  * StorageManager
  ******************************************************************************/
 
@@ -344,6 +516,61 @@ StorageManager::PrefEnabled(JSContext* aCx, JSObject* aObj)
   MOZ_ASSERT(workerPrivate);
 
   return workerPrivate->StorageManagerEnabled();
+}
+
+already_AddRefed<Promise>
+StorageManager::Persist(ErrorResult& aRv)
+{
+  RefPtr<Promise> promise = Promise::Create(mOwner, aRv);
+  if (NS_WARN_IF(!promise)) {
+    return nullptr;
+  }
+
+  if (NS_IsMainThread()) {
+    nsCOMPtr<nsPIDOMWindowInner> window = do_QueryInterface(mOwner);
+
+    if (NS_WARN_IF(!window)) {
+      aRv.Throw(NS_ERROR_FAILURE);
+      return nullptr;
+    }
+
+    nsCOMPtr<nsIDocument> doc = window->GetExtantDoc();
+    if (NS_WARN_IF(!doc)) {
+      aRv.Throw(NS_ERROR_FAILURE);
+      return nullptr;
+    }
+
+    nsCOMPtr<nsIPrincipal> principal = doc->NodePrincipal();
+    MOZ_ASSERT(principal);
+
+    nsCOMPtr<nsIRunnable> request =
+      new PersistentStoragePermissionRequest(principal,
+                                             window,
+                                             promise);
+
+    NS_DispatchToMainThread(request);
+    return promise.forget();
+  }
+
+  WorkerPrivate* workerPrivate = GetCurrentThreadWorkerPrivate();
+  MOZ_ASSERT(workerPrivate);
+
+  RefPtr<PromiseWorkerProxy> promiseProxy =
+    PromiseWorkerProxy::Create(workerPrivate, promise);
+  if (NS_WARN_IF(!promiseProxy)) {
+    return nullptr;
+  }
+
+  RefPtr<EstimateWorkerMainThreadRunnable> runnnable =
+    new EstimateWorkerMainThreadRunnable(promiseProxy->GetWorkerPrivate(),
+                                         promiseProxy);
+
+  runnnable->Dispatch(aRv);
+  if (NS_WARN_IF(aRv.Failed())) {
+    return nullptr;
+  }
+
+  return promise.forget();
 }
 
 NS_IMPL_CYCLE_COLLECTION_WRAPPERCACHE(StorageManager, mOwner)

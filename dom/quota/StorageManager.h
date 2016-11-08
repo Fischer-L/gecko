@@ -7,6 +7,7 @@
 #ifndef mozilla_dom_StorageManager_h
 #define mozilla_dom_StorageManager_h
 
+#include "mozilla/dom/StorageManagerBinding.h"
 #include "nsCOMPtr.h"
 #include "nsCycleCollectionParticipant.h"
 #include "nsISupports.h"
@@ -41,6 +42,9 @@ public:
   // WebIDL
   already_AddRefed<Promise>
   Estimate(ErrorResult& aRv);
+
+  already_AddRefed<Promise>
+  Persist(ErrorResult& aRv);
 
   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(StorageManager)
