@@ -2489,6 +2489,14 @@ const ContentPermissionIntegration = {
       case "desktop-notification": {
         return new PermissionUI.DesktopNotificationPermissionPrompt(request);
       }
+      case "persistent-storage": {
+        // TMP _KEY_:
+        // 1. Switch to Services.prefs.getBoolPref("browser.storageManager.enabled") after the default pref is landed in the all.js
+        let Prefs = Cu.import("resource://gre/modules/Preferences.jsm", {}).Preferences;
+        if (Prefs.get("browser.storageManager.enabled", false)) {
+          return new PermissionUI.PersistentStoragePermissionPrompt(request);
+        }
+      }
     }
     return undefined;
   },

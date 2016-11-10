@@ -5534,11 +5534,9 @@ pref ("security.mixed_content.hsts_priming_cache_timeout", 10080);
 // Disable Storage api in release builds.
 #ifdef NIGHTLY_BUILD
 pref("dom.storageManager.enabled", true);
+pref("browser.storageManager.enabled", true);
 #else
 pref("dom.storageManager.enabled", false);
-#endif
-
-// Enable the Storage management in about:preferences and persistent-storage permission request
-// To enable the DOM implementation, turn on "dom.storageManager.enabled"
 pref("browser.storageManager.enabled", false);
+#endif
 

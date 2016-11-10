@@ -263,7 +263,20 @@ var gPermissionObject = {
     exactHostMatch: true
   },
 
-  "indexedDB": {}
+  "indexedDB": {},
+
+  "persistent-storage": {
+    exactHostMatch: true
+  }
 };
+
+// Delete this entry while being pre-off
+// or the persistent-storage permission would appear in Page info's Permission section
+var Prefs = Components.utils.import("resource://gre/modules/Preferences.jsm", {}).Preferences;
+// TMP _KEY_:
+// 1. Switch to Services.prefs.getBoolPref("browser.storageManager.enabled") after the default pref is landed in the all.js
+if (Prefs.get("browser.storageManager.enabled", false) === false) {
+  delete gPermissionObject["persistent-storage"];
+}
 
 const kPermissionIDs = Object.keys(gPermissionObject);

@@ -599,3 +599,69 @@ DesktopNotificationPermissionPrompt.prototype = {
 
 PermissionUI.DesktopNotificationPermissionPrompt =
   DesktopNotificationPermissionPrompt;
+
+/**
+ * Creates a PermissionPrompt for a nsIContentPermissionRequest for
+ * the persistent-storage  API.
+ *
+ * @param request (nsIContentPermissionRequest)
+ *        The request for a permission from content.
+ */
+function PersistentStoragePermissionPrompt(request) {
+  this.request = request;
+}
+
+PersistentStoragePermissionPrompt.prototype = {
+  __proto__: PermissionPromptForRequestPrototype,
+
+  get permissionKey() {
+    return "persistent-storage";
+  },
+
+  get popupOptions() {
+    let checkbox = {
+      show: true,
+      checked: true,
+      label: gBrowserBundle.GetStringFromName("persistentStorage.remember")
+    };
+    return {
+      checkbox
+    };
+  },
+
+  get notificationID() {
+    return "persistent-storage";
+  },
+
+  get anchorID() {
+    return "persistent-storage-notification-icon";
+  },
+
+  get message() {
+    return gBrowserBundle.formatStringFromName(
+      "persistentStorage.allowWithSite", [this.request.principal.URI.host], 1);
+  },
+
+  get promptActions() {
+
+    let actions = [];
+
+    actions.push({
+      label: gBrowserBundle.GetStringFromName("persistentStorage.alwaysAllowStoring"),
+      accessKey:
+        gBrowserBundle.GetStringFromName("persistentStorage.alwaysAllowStoring.accesskey"),
+      action: Ci.nsIPermissionManager.ALLOW_ACTION
+    });
+
+    actions.push({
+      label: gBrowserBundle.GetStringFromName("persistentStorage.neverAllowStoring"),
+      accessKey:
+        gBrowserBundle.GetStringFromName("persistentStorage.neverAllowStoring.accesskey"),
+      action: Ci.nsIPermissionManager.DENY_ACTION
+    });
+
+    return actions;
+  }
+};
+
+PermissionUI.PersistentStoragePermissionPrompt = PersistentStoragePermissionPrompt;
