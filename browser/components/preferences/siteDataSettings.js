@@ -20,6 +20,8 @@ let gSiteDataSettings = {
   // - uri: uri of site; instance of nsIURI
   // - status: persistent-storage permission status
   // - usage: disk usage which site uses
+  // - userAction: "remove" or "switch-permission"; the action user wants to take.
+  //               If not specified, means no action to take
   _sites: null,
 
   _list: null,
@@ -36,11 +38,19 @@ let gSiteDataSettings = {
       let sortCol = document.getElementById("hostCol");
       this._sortSites(this._sites, sortCol);
       this._buildSitesList(this._sites);
+      this._updateButtonsState();
+      Services.obs.notifyObservers(null, "sitedata-settings-init", null);
     });
 
+<<<<<<< HEAD
     setEventListener("hostCol", "click", this.onClickTreeCol);
     setEventListener("usageCol", "click", this.onClickTreeCol);
     setEventListener("statusCol", "click", this.onClickTreeCol);
+=======
+    setEventListener("removeSelected", "command", this.removeSelected);
+    setEventListener("save", "command", this.saveChanges);
+    setEventListener("cancel", "command", this.close);
+>>>>>>> a33bca7... Bug 1312377 - Remove selected site data in Settings of Site Data
   },
 
   /**
@@ -97,6 +107,9 @@ let gSiteDataSettings = {
 
     let prefStrBundle = document.getElementById("bundlePreferences");
     for (let data of sites) {
+      if (data.userAction === "remove") {
+        continue;
+      }
       let statusStrId = data.status === Ci.nsIPermissionManager.ALLOW_ACTION ? "important" : "default";
       let size = DownloadUtils.convertByteUnits(data.usage);
       let item = document.createElement("richlistitem");
@@ -111,5 +124,101 @@ let gSiteDataSettings = {
   onClickTreeCol(e) {
     this._sortSites(this._sites, e.target);
     this._buildSitesList(this._sites);
+  },
+
+  _updateButtonsState() {
+    let items = this._list.getElementsByTagName("richlistitem");
+    let removeBtn = document.getElementById("removeSelected");
+    removeBtn.disabled = !(items.length > 0);
+  },
+
+  removeSelected() {
+    let selected = this._list.selectedItem;
+    if (selected) {
+      let origin = selected.getAttribute("data-origin");
+      for (let site of this._sites) {
+        if (site.uri.spec === origin) {
+          site.userAction = "remove";
+          break;
+        }
+      }
+      this._list.removeChild(selected);
+      this._updateButtonsState();
+    }
+  },
+
+  saveChanges() {
+    let allowed = true;
+
+    // Confirm user really wants to remove site data starts
+    let removeds = [];
+    this._sites = this._sites.filter(site => {
+      if (site.userAction === "remove") {
+        removeds.push(site.uri);
+        return false;
+      }
+      return true;
+    });
+
+    if (removeds.length > 0) {
+      if (this._sites.length == 0) {
+        // User selects all site so equivalent to clearing all data
+        let flags =
+          Services.prompt.BUTTON_TITLE_IS_STRING * Services.prompt.BUTTON_POS_0 +
+          Services.prompt.BUTTON_TITLE_CANCEL * Services.prompt.BUTTON_POS_1 +
+          Services.prompt.BUTTON_POS_0_DEFAULT;
+        let prefStrBundle = document.getElementById("bundlePreferences");
+        let title = prefStrBundle.getString("clearSiteDataPromptTitle");
+        let text = prefStrBundle.getString("clearSiteDataPromptText");
+        let btn0Label = prefStrBundle.getString("clearSiteDataNow");
+        let result = Services.prompt.confirmEx(window, title, text, flags, btn0Label, null, null, null, {});
+        allowed = result == 0;
+        if (allowed) {
+          SiteDataManager.removeAll();
+        }
+      } else {
+        // User only removes partial sites.
+        // We will remove cookies based on base domain, say, user selects "news.foo.com" to remove.
+        // The cookies under "music.foo.com" will be removed together.
+        // We have to prmopt user about this action.
+        let hostsTable = new Map();
+        // Group removed sites by base domain
+        for (let uri of removeds) {
+          let baseDomain = Services.eTLD.getBaseDomain(uri);
+          let hosts = hostsTable.get(baseDomain);
+          if (!hosts) {
+            hosts = [];
+            hostsTable.set(baseDomain, hosts);
+          }
+          hosts.push(uri.host);
+        }
+        // Pick out sites with the same base domain as removed sites
+        for (let site of this._sites) {
+          let baseDomain = Services.eTLD.getBaseDomain(site.uri);
+          let hosts = hostsTable.get(baseDomain);
+          if (hosts) {
+            hosts.push(site.uri.host);
+          }
+        }
+
+        let args = {
+          hostsTable,
+          allowed: false
+        };
+        let features = "centerscreen,chrome,modal,resizable=no";
+        window.openDialog("chrome://browser/content/preferences/siteDataRemoveSelected.xul", "", features, args);
+        allowed = args.allowed;
+        if (allowed) {
+          SiteDataManager.remove(removeds);
+        }
+      }
+    }
+    // Confirm user really wants to remove site data ends
+
+    this.close();
+  },
+
+  close() {
+    window.close();
   }
 };

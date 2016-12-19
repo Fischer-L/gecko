@@ -164,13 +164,13 @@ function waitForCondition(aConditionFn, aMaxTries = 50, aCheckInterval = 100) {
   });
 }
 
-function promiseAlertDialogOpen(buttonAction) {
+function promiseWindowDialogOpen(buttonAction, url) {
   return new Promise(resolve => {
     Services.ww.registerNotification(function onOpen(subj, topic, data) {
       if (topic == "domwindowopened" && subj instanceof Ci.nsIDOMWindow) {
         subj.addEventListener("load", function onLoad() {
           subj.removeEventListener("load", onLoad);
-          if (subj.document.documentURI == "chrome://global/content/commonDialog.xul") {
+          if (subj.document.documentURI == url) {
             Services.ww.unregisterNotification(onOpen);
             let doc = subj.document.documentElement;
             doc.getButton(buttonAction).click();
@@ -180,4 +180,8 @@ function promiseAlertDialogOpen(buttonAction) {
       }
     });
   });
+}
+
+function promiseAlertDialogOpen(buttonAction) {
+  return promiseWindowDialogOpen(buttonAction, "chrome://global/content/commonDialog.xul");
 }
