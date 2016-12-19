@@ -10,6 +10,8 @@ Components.utils.import("resource://gre/modules/PluralForm.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm")
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "SiteDataManager",
+                                  "resource:///modules/SiteDataManager.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "ContextualIdentityService",
                                   "resource://gre/modules/ContextualIdentityService.jsm");
 
@@ -77,21 +79,12 @@ var gCookiesWindow = {
                                                aCookieB.originAttributes);
   },
 
-  _isPrivateCookie: function(aCookie) {
-      let { userContextId } = aCookie.originAttributes;
-      if (!userContextId) {
-        // Default identity is public.
-        return false;
-      }
-      return !ContextualIdentityService.getIdentityFromId(userContextId).public;
-  },
-
   observe: function(aCookie, aTopic, aData) {
     if (aTopic != "cookie-changed")
       return;
 
     if (aCookie instanceof Components.interfaces.nsICookie) {
-      if (this._isPrivateCookie(aCookie)) {
+      if (SiteDataManager.isPrivateCookie(aCookie)) {
         return;
       }
 
@@ -493,7 +486,7 @@ var gCookiesWindow = {
     while (e.hasMoreElements()) {
       var cookie = e.getNext();
       if (cookie && cookie instanceof Components.interfaces.nsICookie) {
-        if (this._isPrivateCookie(cookie)) {
+        if (SiteDataManager.isPrivateCookie(cookie)) {
           continue;
         }
 
