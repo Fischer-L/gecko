@@ -426,6 +426,47 @@ const gSessionHistoryObserver = {
   }
 };
 
+const gStoragePressureObserver = {
+  observe: function(subject, topic, data) {
+    if (topic != "QuotaManager::StoragePressure") {
+      return;
+    }
+
+    const USAGE_THRESHOLD = 5368709120; // 5GB
+    let usage = parseInt(data);
+    let prefStrBundle = document.getElementById("bundle_preferences");
+    if (usage < USAGE_THRESHOLD) {
+      // The firefox-used space < 5GB, then warn user to free some disk space.
+      // This is because this usage is small and not the main cause for space issue.
+      // In order to avoid the bad and wrong impression among users that
+      // firefox eats much disk space, indicate users to clean up other disk space.
+      let flags =
+        Services.prompt.BUTTON_TITLE_IS_STRING * Services.prompt.BUTTON_POS_0 +
+        Services.prompt.BUTTON_POS_0_DEFAULT;
+      let title = prefStrBundle.getString("spaceAlert.title");
+      let text = prefStrBundle.getString("spaceAlert.under5GB.description");
+      let btn0Label = prefStrBundle.getString("spaceAlert.under5GB.okButton.label");
+      Services.prompt.confirmEx(window, title, text, flags, btn0Label, null, null, null, {});
+    } else {
+      // The firefox-used space >= 5GB, then guide users to about:preferences
+      // to clear some data stored on firefox by websites.
+      Cu.import("resource://gre/modules/DownloadUtils.jsm");
+      let flags =
+        Services.prompt.BUTTON_TITLE_IS_STRING * Services.prompt.BUTTON_POS_0 +
+        Services.prompt.BUTTON_TITLE_IS_STRING * Services.prompt.BUTTON_POS_1 +
+        Services.prompt.BUTTON_POS_0_DEFAULT;
+      let title = prefStrBundle.getString("spaceAlert.title");
+      let text = prefStrBundle.getFormattedString("spaceAlert.over5GB.description", DownloadUtils.convertByteUnits(usage));
+      let btn0Label = prefStrBundle.getString("spaceAlert.over5GB.prefButton.label");
+      let btn1Label = prefStrBundle.getString("spaceAlert.over5GB.cancelButton.label");
+      let result = Services.prompt.confirmEx(window, title, text, flags, btn0Label, btn1Label, null, null, {});
+      if (result == 0) {
+        gBrowser.ownerGlobal.openPreferences("advanced",  { advancedTab: "networkTab" });
+      }
+    }
+  }
+};
+
 /**
  * Given a starting docshell and a URI to look up, find the docshell the URI
  * is loaded in.
@@ -1234,6 +1275,7 @@ var gBrowserInit = {
 
     Services.obs.addObserver(gIdentityHandler, "perm-changed", false);
     Services.obs.addObserver(gSessionHistoryObserver, "browser:purge-session-history", false);
+    Services.obs.addObserver(gStoragePressureObserver, "QuotaManager::StoragePressure", false);
     Services.obs.addObserver(gXPInstallObserver, "addon-install-disabled", false);
     Services.obs.addObserver(gXPInstallObserver, "addon-install-started", false);
     Services.obs.addObserver(gXPInstallObserver, "addon-install-blocked", false);
@@ -1566,6 +1608,7 @@ var gBrowserInit = {
 
       Services.obs.removeObserver(gIdentityHandler, "perm-changed");
       Services.obs.removeObserver(gSessionHistoryObserver, "browser:purge-session-history");
+      Services.obs.removeObserver(gStoragePressureObserver, "QuotaManager::StoragePressure");
       Services.obs.removeObserver(gXPInstallObserver, "addon-install-disabled");
       Services.obs.removeObserver(gXPInstallObserver, "addon-install-started");
       Services.obs.removeObserver(gXPInstallObserver, "addon-install-blocked");

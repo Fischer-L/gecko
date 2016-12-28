@@ -5564,6 +5564,6 @@ pref("prompts.authentication_dialog_abuse_limit", 3);
 
 // Enable the Storage management in about:preferences and persistent-storage permission request
 // To enable the DOM implementation, turn on "dom.storageManager.enabled"
-pref("browser.storageManager.enabled", false);
+pref("browser.storageManager.enabled", true);
 
 pref("dom.IntersectionObserver.enabled", true);
