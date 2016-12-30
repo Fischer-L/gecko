@@ -74,6 +74,12 @@ Prompter.prototype = {
         return p.confirmCheck(title, text, checkLabel, checkValue);
     },
 
+    // TMP
+    alertEx : function(domWin, title, text, flags, button0, button1, button2, checkLabel, checkValue) {
+        let p = this.pickPrompter(domWin);
+        return p.alertEx(title, text,  flags, button0, button1, button2, checkLabel, checkValue);
+    },
+
     confirmEx : function(domWin, title, text, flags, button0, button1, button2, checkLabel, checkValue) {
         let p = this.pickPrompter(domWin);
         return p.confirmEx(title, text,  flags, button0, button1, button2, checkLabel, checkValue);
@@ -660,14 +666,14 @@ ModalPrompter.prototype = {
         return args.ok;
     },
 
-    confirmEx : function(title, text, flags, button0, button1, button2,
+    _TMP_promptEx : function(promptType, title, text, flags, button0, button1, button2,
                          checkLabel, checkValue) {
 
         if (!title)
-            title = PromptUtils.getLocalizedString("Confirm");
+            title = promptType === "confirmEx" ? PromptUtils.getLocalizedString("Confirm") : PromptUtils.getLocalizedString("Alert");
 
         let args = {
-            promptType:  "confirmEx",
+            promptType:  promptType,
             title:       title,
             text:        text,
             checkLabel:  checkLabel,
@@ -699,6 +705,57 @@ ModalPrompter.prototype = {
 
         // Get the number of the button the user clicked.
         return args.buttonNumClicked;
+    },
+
+    // TMP
+    alertEx : function(title, text, flags, button0, button1, button2,
+                         checkLabel, checkValue) {
+
+        return this._TMP_promptEx("alertEx", title, text, flags, button0, button1, button2, checkLabel, checkValue);
+    },
+
+    confirmEx : function(title, text, flags, button0, button1, button2,
+                         checkLabel, checkValue) {
+
+        return this._TMP_promptEx("confirmEx", title, text, flags, button0, button1, button2, checkLabel, checkValue);
+
+        // TMP ORIGINAL
+        // if (!title)
+        //     title = PromptUtils.getLocalizedString("Confirm");
+
+        // let args = {
+        //     promptType:  "confirmEx",
+        //     title:       title,
+        //     text:        text,
+        //     checkLabel:  checkLabel,
+        //     checked:     checkValue.value,
+        //     ok:          false,
+        //     buttonNumClicked: 1,
+        // };
+
+        // let [label0, label1, label2, defaultButtonNum, isDelayEnabled] =
+        //     PromptUtils.confirmExHelper(flags, button0, button1, button2);
+
+        // args.defaultButtonNum = defaultButtonNum;
+        // args.enableDelay = isDelayEnabled;
+
+        // if (label0) {
+        //     args.button0Label = label0;
+        //     if (label1) {
+        //         args.button1Label = label1;
+        //         if (label2) {
+        //             args.button2Label = label2;
+        //         }
+        //     }
+        // }
+
+        // this.openPrompt(args);
+
+        // // Checkbox state always returned, even if cancel clicked.
+        // checkValue.value = args.checked;
+
+        // // Get the number of the button the user clicked.
+        // return args.buttonNumClicked;
     },
 
     nsIPrompt_prompt : function(title, text, value, checkLabel, checkValue) {

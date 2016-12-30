@@ -46,6 +46,29 @@ CommonDialog.prototype = {
             this.iconClass     = ["question-icon"];
             this.soundID       = Ci.nsISound.EVENT_CONFIRM_DIALOG_OPEN;
             break;
+
+          // TMP ORIGINAL
+          // case "confirmEx":
+          //   var numButtons = 0;
+          //   if (this.args.button0Label)
+          //       numButtons++;
+          //   if (this.args.button1Label)
+          //       numButtons++;
+          //   if (this.args.button2Label)
+          //       numButtons++;
+          //   if (this.args.button3Label)
+          //       numButtons++;
+          //   if (numButtons == 0)
+          //       throw "A dialog with no buttons? Can not haz.";
+          //   this.numButtons    = numButtons;
+          //   this.hasInputField = false;
+          //   this.iconClass     = ["question-icon"];
+          //   this.soundID       = Ci.nsISound.EVENT_CONFIRM_DIALOG_OPEN;
+          //   break;
+          // TMP ORIGINAL END
+
+          // TMP
+          case "alertEx":
           case "confirmEx":
             var numButtons = 0;
             if (this.args.button0Label)
@@ -60,9 +83,11 @@ CommonDialog.prototype = {
                 throw "A dialog with no buttons? Can not haz.";
             this.numButtons    = numButtons;
             this.hasInputField = false;
-            this.iconClass     = ["question-icon"];
+            this.iconClass     = this.args.promptType === "alertEx" ? ["alert-icon"] : ["question-icon"];
             this.soundID       = Ci.nsISound.EVENT_CONFIRM_DIALOG_OPEN;
             break;
+          // TMPM END
+
           case "prompt":
             this.numButtons = 2;
             this.iconClass  = ["question-icon"];

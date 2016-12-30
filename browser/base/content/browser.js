@@ -428,7 +428,8 @@ const gSessionHistoryObserver = {
 
 const gStoragePressureObserver = {
   observe: function(subject, topic, data) {
-    if (topic != "QuotaManager::StoragePressure") {
+    if (topic != "QuotaManager::StoragePressure" ||
+        !Services.prefs.getBoolPref("browser.storageManager.enabled")) {
       return;
     }
 
@@ -447,6 +448,8 @@ const gStoragePressureObserver = {
       let text = prefStrBundle.getString("spaceAlert.under5GB.description");
       let btn0Label = prefStrBundle.getString("spaceAlert.under5GB.okButton.label");
       Services.prompt.confirmEx(window, title, text, flags, btn0Label, null, null, null, {});
+
+      // Services.prompt.alert(window, title, text);
     } else {
       // The firefox-used space >= 5GB, then guide users to about:preferences
       // to clear some data stored on firefox by websites.

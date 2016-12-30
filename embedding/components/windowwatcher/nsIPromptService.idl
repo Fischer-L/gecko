@@ -121,14 +121,14 @@ interface nsIPromptService : nsISupports
    * to confirmEx.  See confirmEx for more information on how the flags may be
    * combined.
    */
-   
+
   /**
    * Button Position Flags
    */
   const unsigned long BUTTON_POS_0              = 1;
   const unsigned long BUTTON_POS_1              = 1 << 8;
   const unsigned long BUTTON_POS_2              = 1 << 16;
-     
+
   /**
    * Button Title Flags (used to set the labels of buttons in the prompt)
    */
@@ -140,7 +140,7 @@ interface nsIPromptService : nsISupports
   const unsigned long BUTTON_TITLE_DONT_SAVE     = 6;
   const unsigned long BUTTON_TITLE_REVERT        = 7;
   const unsigned long BUTTON_TITLE_IS_STRING     = 127;
-  
+
   /**
    * Button Default Flags (used to select which button is the default one)
    */
@@ -189,7 +189,7 @@ interface nsIPromptService : nsISupports
    *        Used when button 2 uses TITLE_IS_STRING
    * @param aCheckMsg
    *        Text to appear with the checkbox.  Null if no checkbox.
-   * @param aCheckState    
+   * @param aCheckState
    *        Contains the initial checked state of the checkbox when this method
    *        is called and the final checked state after this method returns.
    *
@@ -224,6 +224,19 @@ interface nsIPromptService : nsISupports
                     inout boolean aCheckState);
 
   /**
+   * TMP
+   */
+  int32_t alertEx(in mozIDOMWindowProxy aParent,
+                  in wstring aDialogTitle,
+                  in wstring aText,
+                  in unsigned long aButtonFlags,
+                  in wstring aButton0Title,
+                  in wstring aButton1Title,
+                  in wstring aButton2Title,
+                  in wstring aCheckMsg,
+                  inout boolean aCheckState);
+
+  /**
    * Puts up a dialog with an edit field and an optional, labeled checkbox.
    *
    * @param aParent
@@ -244,11 +257,11 @@ interface nsIPromptService : nsISupports
    *        is called and the final checked state after this method returns.
    *
    * @return true for OK, false for Cancel.
-   */                        
+   */
   boolean prompt(in mozIDOMWindowProxy aParent,
                  in wstring aDialogTitle,
                  in wstring aText,
-                 inout wstring aValue, 
+                 inout wstring aValue,
                  in wstring aCheckMsg,
                  inout boolean aCheckState);
 
@@ -279,7 +292,7 @@ interface nsIPromptService : nsISupports
    *        is called and the final checked state after this method returns.
    *
    * @return true for OK, false for Cancel.
-   */                        
+   */
   boolean promptUsernameAndPassword(in mozIDOMWindowProxy aParent,
                                     in wstring aDialogTitle,
                                     in wstring aText,
@@ -309,7 +322,7 @@ interface nsIPromptService : nsISupports
    *        is called and the final checked state after this method returns.
    *
    * @return true for OK, false for Cancel.
-   */                        
+   */
   boolean promptPassword(in mozIDOMWindowProxy aParent,
                          in wstring aDialogTitle,
                          in wstring aText,
@@ -336,7 +349,7 @@ interface nsIPromptService : nsISupports
    *        method returns true.
    *
    * @return true for OK, false for Cancel.
-   */                                                 
+   */
   boolean select(in mozIDOMWindowProxy aParent,
                  in wstring aDialogTitle,
                  in wstring aText,
