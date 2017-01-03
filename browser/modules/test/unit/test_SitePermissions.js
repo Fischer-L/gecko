@@ -9,7 +9,8 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 add_task(function* testPermissionsListing() {
   Assert.deepEqual(SitePermissions.listPermissions().sort(),
     ["camera", "cookie", "desktop-notification", "geo", "image",
-     "indexedDB", "install", "microphone", "popup", "screen"],
+     "indexedDB", "install", "microphone", "persistent-storage",
+     "popup", "screen"],
     "Correct list of all permissions");
 });
 
@@ -72,7 +73,7 @@ add_task(function* testExactHostMatch() {
   let uri = Services.io.newURI("https://example.com");
   let subUri = Services.io.newURI("https://test1.example.com");
 
-  let exactHostMatched = ["desktop-notification", "camera", "microphone", "screen", "geo"];
+  let exactHostMatched = ["desktop-notification", "camera", "microphone", "screen", "geo", "persistent-storage"];
   let nonExactHostMatched = ["image", "cookie", "popup", "install", "indexedDB"];
 
   let permissions = SitePermissions.listPermissions();
