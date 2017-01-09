@@ -248,6 +248,21 @@ this.SiteDataManager = {
     this.updateSites();
   },
 
+  /**
+   * @param targets {Array} Targets being set. Each array element is an array holding:
+   *    - uri: the uri of site. This site's permission will be set.
+   *    - permission status: the permission status to set, could be
+   *        Ci.nsIPermissionManager.ALLOW_ACTION or Ci.nsIPermissionManager.DENY_ACTION
+   */
+  setPermissionStatus(targets) {
+    for (let [uri, status] of targets) {
+      if (this._sites.get(uri.spec)) {
+        Services.perms.add(uri, "persistent-storage", status);
+      }
+    }
+    this.updateSites();
+  },
+
   isPrivateCookie(cookie) {
     let { userContextId } = cookie.originAttributes;
     if (!userContextId) {
@@ -257,3 +272,58 @@ this.SiteDataManager = {
     return !ContextualIdentityService.getIdentityFromId(userContextId).public;
   }
 };
+
+var mockSiteDataManager = {
+  sites: new Map([
+    [
+      "https://shopping.xyz.com/",
+      {
+        usage: 102400,
+        host: "shopping.xyz.com",
+        status: Ci.nsIPermissionManager.ALLOW_ACTION
+      }
+    ],
+    [
+      "https://music.bar.com/",
+      {
+        usage: 10240,
+        host: "music.bar.com",
+        status: Ci.nsIPermissionManager.ALLOW_ACTION
+      }
+    ],
+    [
+      "https://news.foo.com/",
+      {
+        usage: 1024,
+        host: "news.foo.com",
+        status: Ci.nsIPermissionManager.DENY_ACTION
+      }
+    ]
+  ]),
+
+  _originalGetSites: null,
+
+  getSites: function() {
+    var { NetUtil } = Cu.import("resource://gre/modules/NetUtil.jsm", {});
+    let list = [];
+    this.sites.forEach((data, origin) => {
+      list.push({
+        usage: data.usage,
+        status: data.status,
+        uri: NetUtil.newURI(origin)
+      });
+    });
+    return Promise.resolve(list);
+  },
+
+  register: function() {
+    this._originalGetSites = SiteDataManager.getSites;
+    SiteDataManager.getSites = this.getSites.bind(this);
+  },
+
+  unregister: function() {
+    SiteDataManager.getSites = this._originalGetSites;
+  }
+};
+// mockSiteDataManager.register();
+

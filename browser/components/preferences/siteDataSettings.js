@@ -20,7 +20,7 @@ let gSiteDataSettings = {
   // - uri: uri of site; instance of nsIURI
   // - status: persistent-storage permission status
   // - usage: disk usage which site uses
-  // - userAction: "remove" or "switch-permission"; the action user wants to take.
+  // - userAction: "remove" or "update-permission"; the action user wants to take.
   //               If not specified, means no action to take
   _sites: null,
 
@@ -42,15 +42,13 @@ let gSiteDataSettings = {
       Services.obs.notifyObservers(null, "sitedata-settings-init", null);
     });
 
-<<<<<<< HEAD
     setEventListener("hostCol", "click", this.onClickTreeCol);
     setEventListener("usageCol", "click", this.onClickTreeCol);
     setEventListener("statusCol", "click", this.onClickTreeCol);
-=======
+    setEventListener("sitesList", "selectSiteItem", this.onSelectSiteItem);
     setEventListener("removeSelected", "command", this.removeSelected);
     setEventListener("save", "command", this.saveChanges);
     setEventListener("cancel", "command", this.close);
->>>>>>> a33bca7... Bug 1312377 - Remove selected site data in Settings of Site Data
   },
 
   /**
@@ -121,6 +119,40 @@ let gSiteDataSettings = {
     }
   },
 
+  _getSiteByOrigin(origin) {
+    return this._sites.find(site => site.uri.spec == origin);
+  },
+
+  onSelectSiteItem() {
+    // On site item selected, status menu would appear.
+    // Let's set up the right permission status for status menu
+    let selectedItem = this._list.selectedItem;
+    let site = this._getSiteByOrigin(selectedItem.getAttribute("data-origin"));
+    let menuList = document.getAnonymousElementByAttribute(selectedItem, "class", "menu-list");
+    menuList.selectedIndex = site.status === Ci.nsIPermissionManager.ALLOW_ACTION ? 0 : 1;
+  },
+
+  onSelectStatusMenuItem(menuItem) {
+    let statusStrId = "";
+    let newStatus = null;
+    let selectedItem = this._list.selectedItem;
+    let site = this._getSiteByOrigin(selectedItem.getAttribute("data-origin"));
+
+    if (menuItem.value == "persistent") {
+      statusStrId = "important";
+      newStatus = Ci.nsIPermissionManager.ALLOW_ACTION;
+    } else {
+      statusStrId = "default";
+      newStatus = Ci.nsIPermissionManager.DENY_ACTION;
+    }
+    if (site.status != newStatus) {
+      site.status = newStatus;
+      site.userAction = "update-permission";
+      let prefStrBundle = document.getElementById("bundlePreferences");
+      selectedItem.setAttribute("status", prefStrBundle.getString(statusStrId));
+    }
+  },
+
   onClickTreeCol(e) {
     this._sortSites(this._sites, e.target);
     this._buildSitesList(this._sites);
@@ -150,16 +182,19 @@ let gSiteDataSettings = {
   saveChanges() {
     let allowed = true;
 
-    // Confirm user really wants to remove site data starts
     let removeds = [];
+    let statusUpdates = [];
     this._sites = this._sites.filter(site => {
-      if (site.userAction === "remove") {
+      if (site.userAction === "update-permission") {
+        statusUpdates.push([site.uri, site.status]);
+      } else if (site.userAction === "remove") {
         removeds.push(site.uri);
         return false;
       }
       return true;
     });
 
+    // Confirm user really wants to remove site data starts
     if (removeds.length > 0) {
       if (this._sites.length == 0) {
         // User selects all site so equivalent to clearing all data
@@ -214,6 +249,13 @@ let gSiteDataSettings = {
       }
     }
     // Confirm user really wants to remove site data ends
+
+    // Update permission status
+    if (allowed && statusUpdates.length > 0) {
+      // No more confimation prompt here.
+      // This is because unlike removal operation which deletes data, user can update status anytime.
+      SiteDataManager.setPermissionStatus(statusUpdates);
+    }
 
     this.close();
   },

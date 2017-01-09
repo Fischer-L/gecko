@@ -7,6 +7,8 @@
 <!ENTITY     hostCol.label                 "Site">
 <!ENTITY     statusCol.label               "Status">
 <!ENTITY     usageCol.label                "Storage">
+<!ENTITY     persistent.status.title       "Important">
+<!ENTITY     nonPersistent.status.title    "Default">
 <!ENTITY     removeSelected.label          "Remove Selected">
 <!ENTITY     removeSelected.accesskey      "r">
 <!ENTITY     save.label                    "Save Changes">

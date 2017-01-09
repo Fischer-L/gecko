@@ -425,6 +425,35 @@ const gSessionHistoryObserver = {
   }
 };
 
+const gPersistentPermObserver = { // TMP: TBD
+  observe(subject, topic, data) {
+    if (topic != "perm-changed") return;
+
+    switch (data) {
+      case "cleared":
+        // Command DOM to set all to non-persistent
+        break;
+
+      case "added":
+        // Command DOM to set site to persistent
+        let origin = subject.principal.URI.spec;
+        break;
+
+      case "deleted":
+        // Command DOM to set site to non-persistent
+        break;
+
+      case "changed":
+        if (subject.capability == Ci.nsIPermissionManager.ALLOW_ACTION) {
+          // Command DOM to set site to persistent
+        } else {
+          // Command DOM to set site to non-persistent
+        }
+        break;
+    }
+  }
+};
+
 /**
  * Given a starting docshell and a URI to look up, find the docshell the URI
  * is loaded in.
@@ -1216,6 +1245,7 @@ var gBrowserInit = {
     setTimeout(function() { SafeBrowsing.init(); }, 2000);
 
     Services.obs.addObserver(gIdentityHandler, "perm-changed", false);
+    Services.obs.addObserver(gPersistentPermObserver, "perm-changed", false);
     Services.obs.addObserver(gSessionHistoryObserver, "browser:purge-session-history", false);
     Services.obs.addObserver(gXPInstallObserver, "addon-install-disabled", false);
     Services.obs.addObserver(gXPInstallObserver, "addon-install-started", false);
@@ -1547,6 +1577,7 @@ var gBrowserInit = {
       FullZoom.destroy();
 
       Services.obs.removeObserver(gIdentityHandler, "perm-changed");
+      Services.obs.removeObserver(gPersistentPermObserver, "perm-changed");
       Services.obs.removeObserver(gSessionHistoryObserver, "browser:purge-session-history");
       Services.obs.removeObserver(gXPInstallObserver, "addon-install-disabled");
       Services.obs.removeObserver(gXPInstallObserver, "addon-install-started");
