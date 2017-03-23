@@ -35,78 +35,86 @@ const mockOfflineAppCacheHelper = {
 };
 
 const mockSiteDataManager = {
-  sites: new Map([
-    [
-      "https://account.xyz.com/",
-      {
-        usage: 1024 * 200,
-        host: "account.xyz.com",
-        status: Ci.nsIPermissionManager.ALLOW_ACTION
-      }
-    ],
-    [
-      "https://shopping.xyz.com/",
-      {
-        usage: 1024 * 100,
-        host: "shopping.xyz.com",
-        status: Ci.nsIPermissionManager.DENY_ACTION
-      }
-    ],
-    [
-      "https://video.bar.com/",
-      {
-        usage: 1024 * 20,
-        host: "video.bar.com",
-        status: Ci.nsIPermissionManager.ALLOW_ACTION
-      }
-    ],
-    [
-      "https://music.bar.com/",
-      {
-        usage: 1024 * 10,
-        host: "music.bar.com",
-        status: Ci.nsIPermissionManager.DENY_ACTION
-      }
-    ],
-    [
-      "https://books.foo.com/",
-      {
-        usage: 1024 * 2,
-        host: "books.foo.com",
-        status: Ci.nsIPermissionManager.ALLOW_ACTION
-      }
-    ],
-    [
-      "https://news.foo.com/",
-      {
-        usage: 1024,
-        host: "news.foo.com",
-        status: Ci.nsIPermissionManager.DENY_ACTION
-      }
-    ]
-  ]),
 
-  _originalGetSites: null,
+  _originalGetQuotaUsage: null,
+  _originalRemoveQuotaUsage: null,
 
-  getSites() {
-    let list = [];
+  _getQuotaUsage() {
+    let results = [];
     this.sites.forEach((data, origin) => {
-      list.push({
+      results.push({
+        origin,
         usage: data.usage,
-        status: data.status,
-        uri: NetUtil.newURI(origin)
+        persisted: data.persisted
       });
     });
-    return Promise.resolve(list);
+    return Promise.resolve(results);
+  },
+
+  _removeQuotaUsage(site) {
+    this.sites.delete(site.principal.URI.spec);
   },
 
   register() {
-    this._originalGetSites = SiteDataManager.getSites;
-    SiteDataManager.getSites = this.getSites.bind(this);
+    this._originalGetQuotaUsage = SiteDataManager._getQuotaUsage;
+    SiteDataManager._getQuotaUsage = this._getQuotaUsage.bind(this);
+    this._originalRemoveQuotaUsage = SiteDataManager._removeQuotaUsage;
+    SiteDataManager._removeQuotaUsage = this._removeQuotaUsage.bind(this);
+    this.sites = new Map([
+      [
+        "https://account.xyz.com/",
+        {
+          usage: 1024 * 200,
+          host: "account.xyz.com",
+          persisted: true
+        }
+      ],
+      [
+        "https://shopping.xyz.com/",
+        {
+          usage: 1024 * 100,
+          host: "shopping.xyz.com",
+          persisted: false
+        }
+      ],
+      [
+        "https://video.bar.com/",
+        {
+          usage: 1024 * 20,
+          host: "video.bar.com",
+          persisted: true
+        }
+      ],
+      [
+        "https://music.bar.com/",
+        {
+          usage: 1024 * 10,
+          host: "music.bar.com",
+          persisted: false
+        }
+      ],
+      [
+        "https://books.foo.com/",
+        {
+          usage: 1024 * 2,
+          host: "books.foo.com",
+          persisted: true
+        }
+      ],
+      [
+        "https://news.foo.com/",
+        {
+          usage: 1024,
+          host: "news.foo.com",
+          persisted: false
+        }
+      ]
+    ]);
   },
 
   unregister() {
-    SiteDataManager.getSites = this._originalGetSites;
+    SiteDataManager._getQuotaUsage = this._originalGetQuotaUsage;
+    SiteDataManager._removeQuotaUsage = this._originalRemoveQuotaUsage;
   }
 };
 
@@ -114,12 +122,6 @@ function addPersistentStoragePerm(origin) {
   let uri = NetUtil.newURI(origin);
   let principal = Services.scriptSecurityManager.createCodebasePrincipal(uri, {});
   Services.perms.addFromPrincipal(principal, "persistent-storage", Ci.nsIPermissionManager.ALLOW_ACTION);
-}
-
-function removePersistentStoragePerm(origin) {
-  let uri = NetUtil.newURI(origin);
-  let principal = Services.scriptSecurityManager.createCodebasePrincipal(uri, {});
-  Services.perms.removeFromPrincipal(principal, "persistent-storage");
 }
 
 function getPersistentStoragePermStatus(origin) {
@@ -418,15 +420,9 @@ add_task(function* () {
 // Test selecting and removing all sites one by one
 add_task(function* () {
   yield SpecialPowers.pushPrefEnv({set: [["browser.storageManager.enabled", true]]});
-  let fakeOrigins = [
-    "https://news.foo.com/",
-    "https://mails.bar.com/",
-    "https://videos.xyz.com/",
-    "https://books.foo.com/",
-    "https://account.bar.com/",
-    "https://shopping.xyz.com/"
-  ];
-  fakeOrigins.forEach(origin => addPersistentStoragePerm(origin));
+  mockSiteDataManager.register();
+  let fakeOrigins = [];
+  mockSiteDataManager.sites.forEach((data, origin) => fakeOrigins.push(origin));
 
   let updatePromise = promiseSitesUpdated();
   yield openPreferencesViaOpenPreferencesAPI("advanced", "networkTab", { leaveOpen: true });
@@ -481,8 +477,7 @@ add_task(function* () {
   yield openSettingsDialog();
   assertAllSitesNotListed();
 
-  // Always clean up the fake origins
-  fakeOrigins.forEach(origin => removePersistentStoragePerm(origin));
+  mockSiteDataManager.unregister();
   yield BrowserTestUtils.removeTab(gBrowser.selectedTab);
 
   function removeAllSitesOneByOne() {
@@ -522,15 +517,9 @@ add_task(function* () {
 // Test selecting and removing partial sites
 add_task(function* () {
   yield SpecialPowers.pushPrefEnv({set: [["browser.storageManager.enabled", true]]});
-  let fakeOrigins = [
-    "https://news.foo.com/",
-    "https://mails.bar.com/",
-    "https://videos.xyz.com/",
-    "https://books.foo.com/",
-    "https://account.bar.com/",
-    "https://shopping.xyz.com/"
-  ];
-  fakeOrigins.forEach(origin => addPersistentStoragePerm(origin));
+  mockSiteDataManager.register();
+  let fakeOrigins = [];
+  mockSiteDataManager.sites.forEach((data, origin) => fakeOrigins.push(origin));
 
   let updatePromise = promiseSitesUpdated();
   yield openPreferencesViaOpenPreferencesAPI("advanced", "networkTab", { leaveOpen: true });
@@ -584,8 +573,7 @@ add_task(function* () {
   yield openSettingsDialog();
   assertSitesListed(doc, fakeOrigins.slice(4));
 
-  // Always clean up the fake origins
-  fakeOrigins.forEach(origin => removePersistentStoragePerm(origin));
+  mockSiteDataManager.unregister();
   yield BrowserTestUtils.removeTab(gBrowser.selectedTab);
 
   function removeSelectedSite(origins) {
@@ -606,15 +594,9 @@ add_task(function* () {
 
 add_task(function* () {
   yield SpecialPowers.pushPrefEnv({set: [["browser.storageManager.enabled", true]]});
-  let fakeOrigins = [
-    "https://news.foo.com/",
-    "https://books.foo.com/",
-    "https://mails.bar.com/",
-    "https://account.bar.com/",
-    "https://videos.xyz.com/",
-    "https://shopping.xyz.com/"
-  ];
-  fakeOrigins.forEach(origin => addPersistentStoragePerm(origin));
+  mockSiteDataManager.register();
+  let fakeOrigins = [];
+  mockSiteDataManager.sites.forEach((data, origin) => fakeOrigins.push(origin));
 
   let updatePromise = promiseSitesUpdated();
   yield openPreferencesViaOpenPreferencesAPI("advanced", "networkTab", { leaveOpen: true });
@@ -627,7 +609,7 @@ add_task(function* () {
   let searchBox = frameDoc.getElementById("searchBox");
   searchBox.value = "foo";
   searchBox.doCommand();
-  assertSitesListed(doc, fakeOrigins.slice(0, 2));
+  assertSitesListed(doc, fakeOrigins.filter(origin => origin.includes("foo")));
 
   // Test only removing all visible sites listed
   updatePromise = promiseSitesUpdated();
@@ -641,9 +623,8 @@ add_task(function* () {
   yield settingsDialogClosePromise;
   yield updatePromise;
   yield openSettingsDialog();
-  assertSitesListed(doc, fakeOrigins.slice(2));
+  assertSitesListed(doc, fakeOrigins.filter(origin => !origin.includes("foo")));
 
-  // Always clean up the fake origins
-  fakeOrigins.forEach(origin => removePersistentStoragePerm(origin));
+  mockSiteDataManager.unregister();
   yield BrowserTestUtils.removeTab(gBrowser.selectedTab);
 });
