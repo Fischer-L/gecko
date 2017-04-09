@@ -774,6 +774,9 @@ nsIOService::NewChannelFromURIWithProxyFlagsInternal(nsIURI* aURI,
     nsCOMPtr<nsIChannel> channel;
     nsCOMPtr<nsIProxiedProtocolHandler> pph = do_QueryInterface(handler);
     if (pph) {
+        nsAutoCString spec;
+        aURI->GetSpec(spec);
+        fprintf(stderr, "TMP>>> nsIOService::NewChannelFromURIWithProxyFlagsInternal in pph - aURI.spec = %s\n", spec.get());
         rv = pph->NewProxiedChannel2(aURI, nullptr, aProxyFlags, aProxyURI,
                                      aLoadInfo, getter_AddRefs(channel));
         // if calling NewProxiedChannel2() fails we try to fall back to
@@ -790,6 +793,9 @@ nsIOService::NewChannelFromURIWithProxyFlagsInternal(nsIURI* aURI,
         }
     }
     else {
+        nsAutoCString spec;
+        aURI->GetSpec(spec);
+        fprintf(stderr, "TMP>>> nsIOService::NewChannelFromURIWithProxyFlagsInternal not in pph - aURI.spec = %s\n", spec.get());
         rv = handler->NewChannel2(aURI, aLoadInfo, getter_AddRefs(channel));
         // if calling newChannel2() fails we try to fall back to
         // creating a new channel by calling NewChannel().

@@ -39,6 +39,11 @@ static const RedirEntry kRedirMap[] = {
     "addons", "chrome://mozapps/content/extensions/extensions.xul",
     nsIAboutModule::ALLOW_SCRIPT
   },
+  
+  { "mdn", "https://developer.mozilla.org/",
+    nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT | nsIAboutModule::ALLOW_SCRIPT
+  },
+  
   {
     "buildconfig", "chrome://global/content/buildconfig.html",
     nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT
@@ -192,6 +197,18 @@ nsAboutRedirector::NewChannel(nsIURI* aURI,
                                  nullptr, // aCallbacks
                                  loadFlags);
       NS_ENSURE_SUCCESS(rv, rv);
+
+        int32_t port;
+        aURI->GetPort(&port);
+        fprintf(stderr, "TMP>>> nsAboutRedirector::NewChannel- aURI.port = %d\n", port);
+        
+        nsAutoCString spec;
+        tempURI->GetSpec(spec);
+        fprintf(stderr, "TMP>>> nsAboutRedirector::NewChannel- tempURI.spec = %s\n", spec.get());
+
+        nsAutoCString spec2;
+        aURI->GetSpec(spec2);
+        fprintf(stderr, "TMP>>> nsAboutRedirector::NewChannel - aURI.spec = %s\n", spec2.get());
 
       tempChannel->SetOriginalURI(aURI);
 

@@ -46,8 +46,12 @@ NS_GetAboutModule(nsIURI *aAboutURI, nsIAboutModule** aModule)
   nsresult rv = NS_GetAboutModuleName(aAboutURI, contractID);
   if (NS_FAILED(rv)) return rv;
 
+  fprintf(stderr, "TMP>>> NS_GetAboutModule - before contractID = %s\n", contractID.get());
+
   // look up a handler to deal with "what"
   contractID.Insert(NS_LITERAL_CSTRING(NS_ABOUT_MODULE_CONTRACTID_PREFIX), 0);
+
+  fprintf(stderr, "TMP>>> NS_GetAboutModule - after contractID = %s\n", contractID.get());
 
   return CallGetService(contractID.get(), aModule);
 }

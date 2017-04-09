@@ -151,6 +151,8 @@ AboutRedirector::NewChannel(nsIURI* aURI,
   for (auto & redir : kRedirMap) {
     if (!strcmp(path.get(), redir.id)) {
       nsAutoCString url;
+      nsAutoCString spec;
+      aURI->GetSpec(spec);
 
       if (path.EqualsLiteral("newtab")) {
         // let the aboutNewTabService decide where to redirect
@@ -161,6 +163,8 @@ AboutRedirector::NewChannel(nsIURI* aURI,
         NS_ENSURE_SUCCESS(rv, rv);
       } else if (path.EqualsLiteral("preferences") && sUseOldPreferences) {
         url.AssignASCII("chrome://browser/content/preferences/in-content-old/preferences.xul");
+      } else if (spec.EqualsLiteral("about:preferences#mdn")) {
+        url.AssignASCII("https://developer.mozilla.org/");
       }
       // fall back to the specified url in the map
       if (url.IsEmpty()) {
@@ -192,6 +196,19 @@ AboutRedirector::NewChannel(nsIURI* aURI,
                                  nullptr, // aCallbacks
                                  loadFlags);
       NS_ENSURE_SUCCESS(rv, rv);
+
+        int32_t port;
+        aURI->GetPort(&port);
+        fprintf(stderr, "TMP>>> AboutRedirector::NewChannel- aURI.port = %d\n", port);
+        
+        nsAutoCString spec3;
+        tempURI->GetSpec(spec3);
+        fprintf(stderr, "TMP>>> AboutRedirector::NewChannel- tempURI.spec = %s\n", spec3.get());
+
+        nsAutoCString spec2;
+        aURI->GetSpec(spec2);
+        fprintf(stderr, "TMP>>> AboutRedirector::NewChannel - aURI.spec = %s\n", spec2.get());
+
 
       tempChannel->SetOriginalURI(aURI);
 

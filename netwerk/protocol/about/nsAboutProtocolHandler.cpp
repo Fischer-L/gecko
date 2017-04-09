@@ -186,6 +186,8 @@ nsAboutProtocolHandler::NewChannel2(nsIURI* uri,
       rv = NS_ERROR_FACTORY_NOT_REGISTERED;
     }
 
+    fprintf(stderr, "TMP>>> nsAboutProtocolHandler::NewChannel2 - path = %s\n", path.get());
+
     if (NS_SUCCEEDED(rv)) {
         // The standard return case:
         rv = aboutMod->NewChannel(uri, aLoadInfo, result);
