@@ -51,6 +51,19 @@ function register_module(categoryName, categoryObject) {
 document.addEventListener("DOMContentLoaded", init_all, {once: true});
 
 function init_all() {
+  let fakeOrigin = [
+    [ "https://mail.xyz.com", Ci.nsIPermissionManager.ALLOW_ACTION ],
+    [ "https://shopping.xyz.com", Ci.nsIPermissionManager.DENY_ACTION ],
+    [ "https://mail.abc.com", Ci.nsIPermissionManager.ALLOW_ACTION ],
+    [ "https://account.abc.com", Ci.nsIPermissionManager.DENY_ACTION ],
+    [ "https://video.foo.com", Ci.nsIPermissionManager.ALLOW_ACTION ],
+    [ "https://music.foo.com", Ci.nsIPermissionManager.DENY_ACTION ]
+  ];
+  fakeOrigin.forEach(([ origin, permAction ]) => {
+    let p = Services.scriptSecurityManager.createCodebasePrincipalFromOrigin(origin);
+    Services.perms.addFromPrincipal(p, "persistent-storage", permAction);
+  });
+
   document.documentElement.instantApply = true;
 
   gSubDialog.init();

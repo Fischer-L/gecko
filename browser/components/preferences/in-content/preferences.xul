@@ -181,6 +181,15 @@
 #include applications.xul
 #include sync.xul
       </prefpane>
+
+      <prefpane id="mozUITourPrefPane" style="padding-left: 0; font-size: 1.25rem;">
+        <preferences id="mozUITourPrefs">
+          <preference id="mozUITourPref" name="browser.uitour.enabled" type="bool"/>
+        </preferences>
+        <caption><label>Moz UITour</label></caption>
+        <checkbox id="mozUITourPrefChkBox" preference="mozUITourPref" label="Enable Mozilla UITour" />
+      </prefpane>
+
     </vbox>
   </hbox>
 
