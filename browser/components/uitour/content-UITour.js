@@ -15,6 +15,7 @@ var UITourListener = {
     if (!Services.prefs.getBoolPref("browser.uitour.enabled")) {
       return;
     }
+console.log("TMP>>> UITourListener");
     if (!this.ensureTrustedOrigin()) {
       return;
     }
@@ -66,14 +67,17 @@ var UITourListener = {
 
     if (uri.schemeIs("chrome"))
       return true;
-
+console.log("TMP>> UITour uri.spec =", uri.spec);
+console.log("TMP>> UITour isSafeScheme =", this.isSafeScheme(uri));
     if (!this.isSafeScheme(uri))
       return false;
 
     let permission = Services.perms.testPermission(uri, UITOUR_PERMISSION);
+console.log("TMP>> UITour permission =", permission == Services.perms.ALLOW_ACTION);
     if (permission == Services.perms.ALLOW_ACTION)
       return true;
 
+console.log("TMP>> UITour isTestingOrigin =", this.isTestingOrigin(uri));
     return this.isTestingOrigin(uri);
   },
 
