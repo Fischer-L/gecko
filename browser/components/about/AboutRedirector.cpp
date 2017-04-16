@@ -132,6 +132,7 @@ AboutRedirector::NewChannel(nsIURI* aURI,
                             nsILoadInfo* aLoadInfo,
                             nsIChannel** result)
 {
+  fprintf(stderr, "TMP>>> AboutRedirector::NewChannel");
   NS_ENSURE_ARG_POINTER(aURI);
   NS_ASSERTION(result, "must not be null");
 
@@ -151,6 +152,8 @@ AboutRedirector::NewChannel(nsIURI* aURI,
   for (auto & redir : kRedirMap) {
     if (!strcmp(path.get(), redir.id)) {
       nsAutoCString url;
+      nsAutoCString spec;
+      aURI->GetSpec(spec);
 
       if (path.EqualsLiteral("newtab")) {
         // let the aboutNewTabService decide where to redirect
@@ -161,6 +164,9 @@ AboutRedirector::NewChannel(nsIURI* aURI,
         NS_ENSURE_SUCCESS(rv, rv);
       } else if (path.EqualsLiteral("preferences") && sUseOldPreferences) {
         url.AssignASCII("chrome://browser/content/preferences/in-content-old/preferences.xul");
+      } else if (spec.EqualsLiteral("about:preferences#talk")) {
+        fprintf(stderr, "TMP>>> Redirect about:preferences#talk to https://goo.gl/28qTBN");
+        url.AssignASCII("https://goo.gl/28qTBN");
       }
       // fall back to the specified url in the map
       if (url.IsEmpty()) {
