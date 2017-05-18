@@ -26,7 +26,7 @@ XPCOMUtils.defineLazyGetter(this, "WeaveService", () =>
           AsyncShutdown:false, AutoCompletePopup:false, BookmarkHTMLUtils:false,
           BookmarkJSONUtils:false, BrowserUITelemetry:false, BrowserUsageTelemetry:false,
           ContentClick:false, ContentPrefServiceParent:false, ContentSearch:false,
-          DateTimePickerHelper:false, DirectoryLinksProvider:false,
+          DateTimePickerHelper:false, DeferredTask:false, DirectoryLinksProvider:false,
           ExtensionsUI:false, Feeds:false,
           FileUtils:false, FormValidationHandler:false, Integration:false,
           LightweightThemeManager:false, LoginHelper:false, LoginManagerParent:false,
@@ -63,6 +63,7 @@ let initializedModules = {};
   ["ContentPrefServiceParent", "resource://gre/modules/ContentPrefServiceParent.jsm", "alwaysInit"],
   ["ContentSearch", "resource:///modules/ContentSearch.jsm", "init"],
   ["DateTimePickerHelper", "resource://gre/modules/DateTimePickerHelper.jsm"],
+  ["DeferredTask", "resource://gre/modules/DeferredTask.jsm"],
   ["DirectoryLinksProvider", "resource:///modules/DirectoryLinksProvider.jsm"],
   ["ExtensionsUI", "resource:///modules/ExtensionsUI.jsm"],
   ["Feeds", "resource:///modules/Feeds.jsm"],
@@ -886,6 +887,36 @@ BrowserGlue.prototype = {
     } catch (ex) {}
   },
 
+  _getProfilesIni() {
+    let ini = Services.dirsvc.get("UAppData", Ci.nsIFile);
+    ini.append("profiles.ini");
+    return ini;
+  },
+
+  _touchProfilesIniDeferredTask: null,
+
+  _scheduleTouchProfilesIni(ms) {
+    if (this._touchProfilesIniDeferredTask) {
+      return;
+    }
+
+    let touchProfilesIniTask = () => {
+      let touchProfilesIniOnIdle = () => {
+        let profilesIni = this._getProfilesIni();
+        if (profilesIni.exists()) {
+          OS.File.setDates(profilesIni.path);
+          this._touchProfilesIniDeferredTask.arm();
+        } else {
+          this._touchProfilesIniDeferredTask.disarm();
+        }
+      };
+      let win = RecentWindow.getMostRecentBrowserWindow();
+      win.requestIdleCallback(touchProfilesIniOnIdle);
+    };
+    this._touchProfilesIniDeferredTask = new DeferredTask(touchProfilesIniTask, ms);
+    this._touchProfilesIniDeferredTask.arm();
+  },
+
   // the first browser window has finished initializing
   _onFirstWindowLoaded: function BG__onFirstWindowLoaded(aWindow) {
     // Initialize PdfJs when running in-process and remote. This only
@@ -937,7 +968,18 @@ BrowserGlue.prototype = {
 
     // Offer to reset a user's profile if it hasn't been used for 60 days.
     const OFFER_PROFILE_RESET_INTERVAL_MS = 60 * 24 * 60 * 60 * 1000;
-    let lastUse = Services.appinfo.replacedLockTime;
+    // For every 24 hours, we touch the profiles.ini's `lastModifiedTime`.
+    // In this way, for users who don't close Firefox for months,
+    // we will still be able to know their last-used time.
+    const NEXT_TOUCH_PROFILES_INI_MS = 24 * 60 * 60 * 1000;
+    // Why determine the last-used time by profile lock's `replacedLockTime` and the profiles.ini's `lastModifiedTime` is for
+    // the backward compatibilty. Before Bug 1054947, only using `replacedLockTime` and not touching profilesIni's `lastModifiedTime`.
+    // Hence, `lastModifiedTime` could be much older than the 60-days threshold.
+    // In this case we would misjudge lots of daily active users as inactive users if only consider `lastModifiedTime`.
+    // So here would take the newer time as the last-used time.
+    let profilesIni = this._getProfilesIni();
+    let lastModifiedTime = profilesIni.exists() ? profilesIni.lastModifiedTime : 0;
+    let lastUse = Math.max(lastModifiedTime, Services.appinfo.replacedLockTime);
     let disableResetPrompt = Services.prefs.getBoolPref("browser.disableResetPrompt", false);
 
     if (!disableResetPrompt && lastUse &&
@@ -962,6 +1004,14 @@ BrowserGlue.prototype = {
           this._resetProfileNotification("uninstall");
         }
       }
+    }
+    if (profilesIni.exists()) {
+      let touchProfilesIniOnFirstWindowLoaded = () => {
+        OS.File.setDates(profilesIni.path);
+        this._scheduleTouchProfilesIni(NEXT_TOUCH_PROFILES_INI_MS);
+      };
+      let win = RecentWindow.getMostRecentBrowserWindow();
+      win.requestIdleCallback(touchProfilesIniOnFirstWindowLoaded);
     }
 
     this._checkForOldBuildUpdates();
@@ -2374,6 +2424,10 @@ BrowserGlue.prototype = {
     } else {
       AppMenuNotifications.removeNotification("fxa-needs-authentication");
     }
+  },
+
+  get wrappedJSObject() {
+    return this;
   },
 
   // for XPCOM
