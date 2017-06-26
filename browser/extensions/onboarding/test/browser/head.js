@@ -13,12 +13,19 @@ const TOUR_IDs = [
   "onboarding-tour-default-browser",
 ];
 
+registerCleanupFunction(resetOnboardingDefaultState);
+
 function resetOnboardingDefaultState() {
   // All the prefs should be reset to the default states
   // and no need to revert back so we don't use `SpecialPowers.pushPrefEnv` here.
   Preferences.set("browser.onboarding.hidden", false);
   Preferences.set("browser.onboarding.notification.finished", false);
-  Preferences.set("browser.onboarding.notification.lastPrompted", "");
+  Preferences.set("browser.onboarding.notification.last-prompted", "");
+  Preferences.set("browser.onboarding.notification.mute-duration-on-first-session-ms", 300000);
+  Preferences.set("browser.onboarding.notification.max-life-time-per-tour-ms", 432000000);
+  Preferences.set("browser.onboarding.notification.last-time-of-changing-tour-ms", "0");
+  Preferences.set("browser.onboarding.notification.max-prompt-count-per-tour", 8);
+  Preferences.set("browser.onboarding.notification.prompt-count", 0);
   TOUR_IDs.forEach(id => Preferences.set(`browser.onboarding.tour.${id}.completed`, false));
 }
 
@@ -130,4 +137,16 @@ function getCurrentActiveTour(browser) {
     }
     return { activeNavItemId, activePageId };
   });
+}
+
+function waitUntilWindowIdle(browser) {
+  return ContentTask.spawn(browser, {}, function() {
+    return new Promise(resolve => content.requestIdleCallback(resolve));
+  });
+}
+
+function skipMuteNotificationOnFirstSession() {
+  let maxTime = Preferences.get("browser.onboarding.notification.max-life-time-per-tour-ms");
+  let lastTime = (Date.now() - maxTime - 1).toString();
+  Preferences.set("browser.onboarding.notification.last-time-of-changing-tour-ms", lastTime);
 }
