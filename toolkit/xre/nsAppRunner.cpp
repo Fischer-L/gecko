@@ -2278,7 +2278,6 @@ SelectProfile(nsIProfileLock* *aResult, nsIToolkitProfileService* aProfileSvc, n
   if (EnvHasValue("MOZ_RESET_PROFILE_RESTART")) {
     gDoProfileReset = true;
     gDoMigration = true;
-    SaveToEnv("MOZ_RESET_PROFILE_RESTART=");
   }
 
   // reset-profile and migration args need to be checked before any profiles are chosen below.
