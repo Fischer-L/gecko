@@ -213,7 +213,8 @@ class Onboarding {
     this._window.addEventListener("unload", () => this.destroy());
 
     this._initPrefObserver();
-    this._initNotification();
+    // Doing tour notification takes some effort. Let's do it on idle.
+    this._window.requestIdleCallback(() => this._initNotification());
   }
 
   _initNotification() {
@@ -282,12 +283,14 @@ class Onboarding {
 
       case "onboarding-notification-close-btn":
         this.hideNotification();
+        this._markTimeForNextTourNotification();
         break;
 
       case "onboarding-notification-action-btn":
         let tourId = this._notificationBar.dataset.targetTourId;
         this.toggleOverlay();
         this.gotoPage(tourId);
+        this._markTimeForNextTourNotification();
         break;
     }
     if (evt.target.classList.contains("onboarding-tour-item")) {
@@ -337,36 +340,109 @@ class Onboarding {
     return Preferences.get(`browser.onboarding.tour.${tourId}.completed`, false);
   }
 
+  _muteNotificationOnFirstSession() {
+    if (Preferences.get("browser.onboarding.notification.last-prompted", "")) {
+      // We had prompted before, this must not be the 1st session.
+      return false;
+    }
+
+    // Reuse the `last-time-of-changing-tour-ms` to save the time that
+    // we try to prompt on the 1st session.
+    let lastTime = parseInt(
+      Preferences.get("browser.onboarding.notification.last-time-of-changing-tour-ms"));
+    if (lastTime == 0) {
+      this.sendMessageToChrome("set-prefs", [{
+        name: "browser.onboarding.notification.last-time-of-changing-tour-ms",
+        value: Date.now().toString()
+      }]);
+      return true;
+    }
+    let muteDuration = Preferences.get("browser.onboarding.notification.mute-duration-on-first-session-ms");
+    return Date.now() - lastTime <= muteDuration;
+  }
+
+  _markTimeForNextTourNotification() {
+    // Simplly make the criteria of switching to next tour true
+    // so next time it would automatically go for next tour.
+    let maxTime = Preferences.get("browser.onboarding.notification.max-life-time-per-tour-ms");
+    let maxCount = Preferences.get("browser.onboarding.notification.max-prompt-count-per-tour");
+    let params = [];
+    params.push({
+      name: "browser.onboarding.notification.last-time-of-changing-tour-ms",
+      value: (Date.now() - maxTime).toString()
+    });
+    params.push({
+      name: "browser.onboarding.notification.prompt-count",
+      value: maxCount
+    });
+    this.sendMessageToChrome("set-prefs", params);
+  }
+
+  _isTimeForNextTourNotification() {
+    let promptCount = Preferences.get("browser.onboarding.notification.prompt-count");
+    let maxCount = Preferences.get("browser.onboarding.notification.max-prompt-count-per-tour");
+    if (promptCount >= maxCount) {
+      return true;
+    }
+
+    let lastTime = parseInt(
+      Preferences.get("browser.onboarding.notification.last-time-of-changing-tour-ms"));
+    let maxTime = Preferences.get("browser.onboarding.notification.max-life-time-per-tour-ms");
+    if (Date.now() - lastTime >= maxTime) {
+      return true;
+    }
+
+    return false;
+  }
+
   showNotification() {
     if (Preferences.get("browser.onboarding.notification.finished", false)) {
       return;
     }
 
-    // Pick out the next target tour to show
+    if (this._muteNotificationOnFirstSession()) {
+      return;
+    }
+
+    // Pick out the target tour to show
     let targetTour = null;
-
-    // Take the last tour as the default last prompted
-    // so below would start from the 1st one if found no the last prompted from the pref.
-    let lastPromptedId = onboardingTours[onboardingTours.length - 1].id;
-    lastPromptedId = Preferences.get("browser.onboarding.notification.lastPrompted", lastPromptedId);
-
+    let timeForNext = this._isTimeForNextTourNotification();
+    let lastPromptedId = Preferences.get("browser.onboarding.notification.last-prompted", "");
+    // When couldn't find the tour,
+    // that could be because the pref was manually modified into unknown value
+    // or the tour version has been updated so have an new tours set,
+    // or simply no notification has been prompted before.
+    // We will handle this situation later below.
     let lastTourIndex = onboardingTours.findIndex(tour => tour.id == lastPromptedId);
-    if (lastTourIndex < 0) {
-      // Couldn't find the tour.
-      // This could be because the pref was manually modified into unknown value
-      // or the tour version has been updated so have an new tours set.
-      // Take the last tour as the last prompted so would start from the 1st one below.
-      lastTourIndex = onboardingTours.length - 1;
+
+    let startIndex = 0;
+    if (timeForNext) {
+      if (lastTourIndex < 0) {
+        // Take the last tour as the last prompted so would start from the next one (the 1st tour).
+        lastTourIndex = onboardingTours.length - 1;
+      }
+      // For the case that should move on to next tour,
+      // suppose there are tour #0 ~ #5 and the #3 is the last prompted.
+      // This would form [#4, #5, #0, #1, #2, #3] below.
+      // So the 1st met incomplete tour in #4 ~ #2 would be the one to show.
+      // Or #3 would be the one to show if #4 ~ #2 are all completed.
+      startIndex = lastTourIndex + 1;
+    } else {
+      if (lastTourIndex < 0) {
+        // Take the 1st tour as the last prompted so would start from the 1st one.
+        lastTourIndex = 0;
+      }
+      // For the case that shouldn't move on to next tour,
+      // suppose there are tour #0 ~ #5 and the #3 is the last prompted.
+      // This would form [#3, #4, #5, #0, #1, #2] below.
+      // So would try to show #3 again first.
+      // If #3 is completed, then would take the 1st met incomplete tour in #4 ~ #2.
+      startIndex = lastTourIndex;
     }
 
     // Form tours to notify into the order we want.
-    // For example, There are tour #0 ~ #5 and the #3 is the last prompted.
-    // This would form [#4, #5, #0, #1, #2, #3].
-    // So the 1st met incomplete tour in #4 ~ #2 would be the one to show.
-    // Or #3 would be the one to show if #4 ~ #2 are all completed.
-    let toursToNotify = [ ...onboardingTours.slice(lastTourIndex + 1), ...onboardingTours.slice(0, lastTourIndex + 1) ];
+    let toursToNotify = [ ...onboardingTours.slice(startIndex), ...onboardingTours.slice(0, startIndex) ];
     targetTour = toursToNotify.find(tour => !this.isTourCompleted(tour.id));
-
 
     if (!targetTour) {
       this.sendMessageToChrome("set-prefs", [{
@@ -400,10 +476,30 @@ class Onboarding {
       this._window.requestAnimationFrame(() => this._notificationBar.classList.add("onboarding-opened"));
     });
 
-    this.sendMessageToChrome("set-prefs", [{
-      name: "browser.onboarding.notification.lastPrompted",
-      value: targetTour.id
-    }]);
+    let params = [];
+    let promptCountPref = "browser.onboarding.notification.prompt-count";
+    if (lastPromptedId != targetTour.id) {
+      params.push({
+        name: "browser.onboarding.notification.last-prompted",
+        value: targetTour.id
+      });
+      // We just moved on to the next tour so reset the time and the count
+      params.push({
+        name: "browser.onboarding.notification.last-time-of-changing-tour-ms",
+        value: Date.now().toString()
+      });
+      params.push({
+        name: promptCountPref,
+        value: 1
+      });
+    } else {
+      let promptCount = Preferences.get(promptCountPref);
+      params.push({
+        name: promptCountPref,
+        value: promptCount + 1
+      });
+    }
+    this.sendMessageToChrome("set-prefs", params);
   }
 
   hideNotification() {

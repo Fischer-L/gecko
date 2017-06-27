@@ -12,7 +12,9 @@ const PREF_WHITELIST = [
   "browser.onboarding.enabled",
   "browser.onboarding.hidden",
   "browser.onboarding.notification.finished",
-  "browser.onboarding.notification.lastPrompted"
+  "browser.onboarding.notification.last-prompted",
+  "browser.onboarding.notification.prompt-count",
+  "browser.onboarding.notification.last-time-of-changing-tour-ms",
 ];
 
 /**
