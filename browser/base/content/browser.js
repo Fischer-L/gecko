@@ -522,6 +522,11 @@ const gStoragePressureObserver = {
       return;
     }
 
+    let notificationBox = document.getElementById("high-priority-global-notificationbox");
+    if (notificationBox.getNotificationWithValue("storage-pressure-notification")) {
+      return;
+    }
+
     // Don't display notification twice within the given interval.
     // This is because
     //   - not to annoy user
@@ -535,15 +540,21 @@ const gStoragePressureObserver = {
     }
     this._lastNotificationTime = Date.now();
 
-    const BYTES_IN_GIGABYTE = 1073741824;
-    const USAGE_THRESHOLD_BYTES = BYTES_IN_GIGABYTE *
-      Services.prefs.getIntPref("browser.storageManager.pressureNotification.usageThresholdGB");
+    let USAGE_THRESHOLD_BYTES = 0;
+    const TEST_USAGE_THRESHOLD_BYTES = parseInt(Services.prefs.getStringPref("browser.storageManager.pressureNotification.testUsageThresholdByte", ""));
+    if (TEST_USAGE_THRESHOLD_BYTES > 0) {
+      USAGE_THRESHOLD_BYTES = TEST_USAGE_THRESHOLD_BYTES;
+    } else {
+      const BYTES_IN_GIGABYTE = 1073741824;
+      USAGE_THRESHOLD_BYTES = BYTES_IN_GIGABYTE *
+        Services.prefs.getIntPref("browser.storageManager.pressureNotification.usageThresholdGB");
+    }
+
     let msg = "";
     let buttons = [];
     let usage = subject.QueryInterface(Ci.nsISupportsPRUint64).data
     let prefStrBundle = document.getElementById("bundle_preferences");
     let brandShortName = document.getElementById("bundle_brand").getString("brandShortName");
-    let notificationBox = document.getElementById("high-priority-global-notificationbox");
     buttons.push({
       label: prefStrBundle.getString("spaceAlert.learnMoreButton.label"),
       accessKey: prefStrBundle.getString("spaceAlert.learnMoreButton.accesskey"),

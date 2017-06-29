@@ -873,6 +873,12 @@ BrowserGlue.prototype = {
 
   // the first browser window has finished initializing
   _onFirstWindowLoaded: function BG__onFirstWindowLoaded(aWindow) {
+    let testLimit = Services.prefs.getIntPref("browser.storageManager.pressureNotification.testStorageLimitKB", 200);
+    if (testLimit <= 0) {
+      testLimit = -1;
+    }
+    Services.prefs.setIntPref("dom.quotaManager.temporaryStorage.fixedLimit", testLimit);
+
     // Initialize PdfJs when running in-process and remote. This only
     // happens once since PdfJs registers global hooks. If the PdfJs
     // extension is installed the init method below will be overridden

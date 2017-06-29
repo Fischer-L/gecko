@@ -5776,8 +5776,17 @@ pref("browser.storageManager.enabled", true);
 #else
 pref("browser.storageManager.enabled", false);
 #endif
-pref("browser.storageManager.pressureNotification.minIntervalMS", 1200000);
+pref("browser.storageManager.pressureNotification.minIntervalMS", 1);
 pref("browser.storageManager.pressureNotification.usageThresholdGB", 5);
+// "browser.storageManager.pressureNotification.testUsageThresholdByte"
+// is only for testing prupose so that we don't have to hit 5GB to test the warning notification every time.
+// Set to any string which evalutes to > 0 would make this pref take effect and override
+// the limit imposed by "browser.storageManager.pressureNotification.usageThresholdGB"
+pref("browser.storageManager.pressureNotification.testUsageThresholdByte", "481280");
+// "browser.storageManager.pressureNotification.testStorageLimitKB" is only for testing prupose.
+// Setting it to value > 0 would limit the Firefox storage limit to that value.
+// Setting it to value <= 0 would cancel this limit.
+pref("browser.storageManager.pressureNotification.testStorageLimitKB", 100);
 
 // When a user cancels this number of authentication dialogs coming from
 // a single web page in a row, all following authentication dialogs will
