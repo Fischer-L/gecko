@@ -233,8 +233,6 @@ class Onboarding {
 
   async init(contentWindow) {
     this._window = contentWindow;
-    this._tourItems = [];
-    this._tourPages = [];
     this._tours = [];
 
     let tourIds = this._getTourIDList(Services.prefs.getStringPref("browser.onboarding.tour-type", "update"));
@@ -280,6 +278,8 @@ class Onboarding {
       return;
     }
     this.uiInitialized = true;
+    this._tourItems = [];
+    this._tourPages = [];
 
     this._overlayIcon = this._renderOverlayIcon();
     this._overlayIcon.addEventListener("click", this);
@@ -411,6 +411,7 @@ class Onboarding {
       this._notificationBar.remove();
     }
 
+    this._tourItems = this._tourPages =
     this._overlayIcon = this._overlay = this._notificationBar = null;
   }
 
