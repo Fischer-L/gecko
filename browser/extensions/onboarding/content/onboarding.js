@@ -285,7 +285,7 @@ class Onboarding {
     this._tourItems = [];
     this._tourPages = [];
 
-    this._overlayIcon = this._renderOverlayIcon();
+    this._overlayIcon = this._renderOverlayButton();
     this._overlayIcon.addEventListener("click", this);
     this._window.document.body.appendChild(this._overlayIcon);
 
@@ -374,7 +374,7 @@ class Onboarding {
     }
 
     switch (evt.target.id) {
-      case "onboarding-overlay-icon":
+      case "onboarding-overlay-button":
       case "onboarding-overlay-close-btn":
       // If the clicking target is directly on the outer-most overlay,
       // that means clicking outside the tour content area.
@@ -653,7 +653,7 @@ class Onboarding {
         </div>
         <button id="onboarding-notification-action-btn"></button>
       </section>
-      <button id="onboarding-notification-close-btn"></button>
+      <button id="onboarding-notification-close-btn" class="onboarding-close-btn"></button>
     `;
     let toolTip = this._bundle.formatStringFromName(
       this._tourType === "new" ? "onboarding.notification-icon-tool-tip" :
@@ -684,7 +684,7 @@ class Onboarding {
     // The security should be fine because this is not from an external input.
     div.innerHTML = `
       <div id="onboarding-overlay-dialog">
-        <span id="onboarding-overlay-close-btn"></span>
+        <button id="onboarding-overlay-close-btn" class="onboarding-close-btn"></button>
         <header id="onboarding-header"></header>
         <nav>
           <ul id="onboarding-tour-list"></ul>
@@ -702,16 +702,18 @@ class Onboarding {
     return div;
   }
 
-  _renderOverlayIcon() {
-    let img = this._window.document.createElement("div");
-    let tooltip = this._bundle.formatStringFromName(
-      this._tourType === "new" ? "onboarding.overlay-icon-tooltip" :
-                                 "onboarding.overlay-icon-tooltip-updated",
-      [BRAND_SHORT_NAME], 1);
-
-    img.setAttribute("aria-label", tooltip);
-    img.id = "onboarding-overlay-icon";
-    return img;
+  _renderOverlayButton() {
+    let button = this._window.document.createElement("button");
+    let tooltipStringId = this._tourType === "new" ?
+      "onboarding.overlay-icon-tooltip" : "onboarding.overlay-icon-tooltip-updated";
+    let tooltip = this._bundle.formatStringFromName(tooltipStringId, [BRAND_SHORT_NAME], 1);
+    button.setAttribute("aria-label", tooltip);
+    button.id = "onboarding-overlay-button";
+    let img = this._window.document.createElement("img");
+    img.id = "onboarding-overlay-button-icon";
+    img.src = "resource://onboarding/img/overlay-icon.svg";
+    button.appendChild(img);
+    return button;
   }
 
   _loadTours(tours) {
