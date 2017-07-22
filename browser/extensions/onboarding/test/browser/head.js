@@ -37,9 +37,31 @@ function setTourCompletedState(tourId, state) {
   Preferences.set(`browser.onboarding.tour.${tourId}.completed`, state);
 }
 
-function promiseOnboardingOverlayLoaded(browser) {
-  // The onboarding overlay is init inside window.requestIdleCallback, not immediately,
-  // so we use check conditions here.
+async function openTab(url) {
+  let tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
+  let loadedPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
+  await BrowserTestUtils.loadURI(tab.linkedBrowser, url);
+  await loadedPromise;
+  return tab;
+}
+
+function reloadTab(tab) {
+  let reloadPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
+  tab.linkedBrowser.reload();
+  return reloadPromise;
+}
+
+async function promiseOnboardingOverlayLoaded(browser) {
+  // The onboarding overlay is inited inside `requestIdleCallback` on thw window load event
+  // so the loading timing is a bit uncertain.
+  // If we went for the dom mutation event to observe the onboaridng element,
+  // there could be some potential intermittent issue
+  // (hard to guarantee the timing of adding observer comes before the onboaridng element appended).
+  // Another possible solution is to send some message, like `notifyObserver` to notify the loading.
+  // However, this is adding more costs just for testing and we don't want more costs.
+  // So here we wait for the ilde twice and then the check condition here.
+  await waitUntilWindowIdle(browser);
+  await waitUntilWindowIdle(browser);
   let condition = () => {
     return ContentTask.spawn(browser, {}, function() {
       return new Promise(resolve => {
@@ -54,9 +76,7 @@ function promiseOnboardingOverlayLoaded(browser) {
   };
   return BrowserTestUtils.waitForCondition(
     condition,
-    "Should load onboarding overlay",
-    100,
-    50 // Bug 1381335 increased retries, so debug builds can trigger idle in time
+    "Should load onboarding overlay"
   );
 }
 
@@ -92,7 +112,11 @@ function promisePrefUpdated(name, expectedValue) {
   });
 }
 
-function promiseTourNotificationOpened(browser) {
+async function promiseTourNotificationOpened(browser) {
+  // The tour notification would be prompted on idle,
+  // so we wait idle twice here before proceeding
+  await waitUntilWindowIdle(browser);
+  await waitUntilWindowIdle(browser);
   let condition = () => {
     return ContentTask.spawn(browser, {}, function() {
       return new Promise(resolve => {
