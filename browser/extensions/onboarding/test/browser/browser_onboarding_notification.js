@@ -17,9 +17,7 @@ add_task(async function test_show_tour_notifications_in_order() {
   await loopTourNotificationQueueOnceInOrder();
 
   expectedPrefUpdate = promisePrefUpdated("browser.onboarding.notification.finished", true);
-  reloadPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
-  tab.linkedBrowser.reload();
-  await reloadPromise;
+  await reloadTab(tab);
   await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
   await expectedPrefUpdate;
   let tourId = await getCurrentNotificationTargetTourId(tab.linkedBrowser);
@@ -29,12 +27,9 @@ add_task(async function test_show_tour_notifications_in_order() {
   async function loopTourNotificationQueueOnceInOrder() {
     for (let i = 0; i < tourIds.length; ++i) {
       if (tab) {
-        reloadPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
-        tab.linkedBrowser.reload();
-        await reloadPromise;
+        await reloadTab(tab);
       } else {
-        tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
-        await BrowserTestUtils.loadURI(tab.linkedBrowser, ABOUT_NEWTAB_URL);
+        tab = await openTab(ABOUT_NEWTAB_URL);
       }
       await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
       await promiseTourNotificationOpened(tab.linkedBrowser);
@@ -48,8 +43,7 @@ add_task(async function test_open_target_tour_from_notification() {
   resetOnboardingDefaultState();
   skipMuteNotificationOnFirstSession();
 
-  let tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
-  await BrowserTestUtils.loadURI(tab.linkedBrowser, ABOUT_NEWTAB_URL);
+  let tab = await openTab(ABOUT_NEWTAB_URL);
   await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
   await promiseTourNotificationOpened(tab.linkedBrowser);
   let targetTourId = await getCurrentNotificationTargetTourId(tab.linkedBrowser);
@@ -61,4 +55,3 @@ add_task(async function test_open_target_tour_from_notification() {
   is(`${targetTourId}-page`, activePageId, "Should display the target tour page.");
   await BrowserTestUtils.removeTab(tab);
 });
-

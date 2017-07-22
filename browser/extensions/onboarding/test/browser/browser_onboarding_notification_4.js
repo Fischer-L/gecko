@@ -10,13 +10,10 @@ add_task(async function test_remove_all_tour_notifications_through_close_button(
   let tourIds = TOUR_IDs;
   let tab = null;
   let targetTourId = null;
-  let reloadPromise = null;
   await closeTourNotificationsOneByOne();
 
   let expectedPrefUpdate = promisePrefUpdated("browser.onboarding.notification.finished", true);
-  reloadPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
-  tab.linkedBrowser.reload();
-  await reloadPromise;
+  await reloadTab(tab);
   await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
   await expectedPrefUpdate;
   let tourId = await getCurrentNotificationTargetTourId(tab.linkedBrowser);
@@ -26,12 +23,9 @@ add_task(async function test_remove_all_tour_notifications_through_close_button(
   async function closeTourNotificationsOneByOne() {
     for (let i = 0; i < tourIds.length; ++i) {
       if (tab) {
-        reloadPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
-        tab.linkedBrowser.reload();
-        await reloadPromise;
+        await reloadTab(tab);
       } else {
-        tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
-        await BrowserTestUtils.loadURI(tab.linkedBrowser, ABOUT_NEWTAB_URL);
+        tab = await openTab(ABOUT_NEWTAB_URL);
       }
       await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
       await promiseTourNotificationOpened(tab.linkedBrowser);
@@ -50,13 +44,10 @@ add_task(async function test_remove_all_tour_notifications_through_action_button
   let tourIds = TOUR_IDs;
   let tab = null;
   let targetTourId = null;
-  let reloadPromise = null;
   await clickTourNotificationActionButtonsOneByOne();
 
   let expectedPrefUpdate = promisePrefUpdated("browser.onboarding.notification.finished", true);
-  reloadPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
-  tab.linkedBrowser.reload();
-  await reloadPromise;
+  await reloadTab(tab);
   await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
   await expectedPrefUpdate;
   let tourId = await getCurrentNotificationTargetTourId(tab.linkedBrowser);
@@ -66,12 +57,9 @@ add_task(async function test_remove_all_tour_notifications_through_action_button
   async function clickTourNotificationActionButtonsOneByOne() {
     for (let i = 0; i < tourIds.length; ++i) {
       if (tab) {
-        reloadPromise = BrowserTestUtils.browserLoaded(tab.linkedBrowser);
-        tab.linkedBrowser.reload();
-        await reloadPromise;
+        await reloadTab(tab);
       } else {
-        tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
-        await BrowserTestUtils.loadURI(tab.linkedBrowser, ABOUT_NEWTAB_URL);
+        tab = await openTab(ABOUT_NEWTAB_URL);
       }
       await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
       await promiseTourNotificationOpened(tab.linkedBrowser);

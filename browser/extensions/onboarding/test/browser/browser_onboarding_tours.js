@@ -33,8 +33,7 @@ add_task(async function test_hide_onboarding_tours() {
   let tourIds = TOUR_IDs;
   let tabs = [];
   for (let url of URLs) {
-    let tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
-    await BrowserTestUtils.loadURI(tab.linkedBrowser, url);
+    let tab = await openTab(url);
     await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
     await BrowserTestUtils.synthesizeMouseAtCenter("#onboarding-overlay-button", {}, tab.linkedBrowser);
     await promiseOnboardingOverlayOpened(tab.linkedBrowser);
@@ -64,8 +63,7 @@ add_task(async function test_click_action_button_to_set_tour_completed() {
   let tourIds = TOUR_IDs;
   let tabs = [];
   for (let url of URLs) {
-    let tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
-    await BrowserTestUtils.loadURI(tab.linkedBrowser, url);
+    let tab = await openTab(url);
     await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
     await BrowserTestUtils.synthesizeMouseAtCenter("#onboarding-overlay-button", {}, tab.linkedBrowser);
     await promiseOnboardingOverlayOpened(tab.linkedBrowser);
@@ -86,7 +84,6 @@ add_task(async function test_click_action_button_to_set_tour_completed() {
   }
 });
 
-
 add_task(async function test_set_right_tour_completed_style_on_overlay() {
   resetOnboardingDefaultState();
 
@@ -98,8 +95,7 @@ add_task(async function test_set_right_tour_completed_style_on_overlay() {
 
   let tabs = [];
   for (let url of URLs) {
-    let tab = await BrowserTestUtils.openNewForegroundTab(gBrowser);
-    await BrowserTestUtils.loadURI(tab.linkedBrowser, url);
+    let tab = await openTab(url);
     await promiseOnboardingOverlayLoaded(tab.linkedBrowser);
     await BrowserTestUtils.synthesizeMouseAtCenter("#onboarding-overlay-button", {}, tab.linkedBrowser);
     await promiseOnboardingOverlayOpened(tab.linkedBrowser);
