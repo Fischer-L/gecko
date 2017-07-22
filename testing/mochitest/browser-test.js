@@ -7,6 +7,7 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Task.jsm");
 Cu.import("resource://gre/modules/AppConstants.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/Console.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "ContentSearch",
   "resource:///modules/ContentSearch.jsm");
@@ -62,8 +63,11 @@ var TabDestroyObserver = {
 };
 
 function testInit() {
+  console.log("TMP>>> testInit.........\n");
+  console.log("TMP>>> window.location.href = " + window.location.href + "\n");
   gConfig = readConfig();
   if (gConfig.testRoot == "browser") {
+    console.log("TMP>>> testInit - testRoot == browser\n");
     // Make sure to launch the test harness for the first opened window only
     var prefs = Services.prefs;
     if (prefs.prefHasUserValue("testing.browserTestHarness.running"))
@@ -98,6 +102,7 @@ function testInit() {
     messageManager.loadFrameScript(listener, true);
   }
   if (gConfig.e10s) {
+    console.log("TMP>>> testInit - gConfig.e10s == true\n");
     e10s_init();
 
     let processCount = prefs.getIntPref("dom.ipc.processCount", 1);

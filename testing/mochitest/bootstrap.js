@@ -50,15 +50,20 @@ function loadMochitest(e) {
   WindowListener.setupWindow(win);
   Services.wm.addListener(WindowListener);
 
+  let TMP = {};
+  Cu.import("resource://gre/modules/Console.jsm", TMP);
+
   let overlay;
   if (flavor == "jetpack-addon") {
     overlay = "chrome://mochikit/content/jetpack-addon-overlay.xul";
   } else if (flavor == "jetpack-package") {
     overlay = "chrome://mochikit/content/jetpack-package-overlay.xul";
   } else {
+    TMP.console.log("TMP>>> Loading browser-test-overlay.xul");
     overlay = "chrome://mochikit/content/browser-test-overlay.xul";
   }
 
+  TMP.console.log("TMP>>> loaded overlay on document of", win.document.URL.toString());
   win.document.loadOverlay(overlay, null);
 }
 
