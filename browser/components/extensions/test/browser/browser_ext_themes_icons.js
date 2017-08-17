@@ -138,7 +138,6 @@ async function runTestWithIcons(icons) {
     ["text_encoding", "#characterencoding-button", "characterencoding-button"],
     ["email_link", "#email-link-button", "email-link-button"],
     ["forget", "#panic-button", "panic-button"],
-    ["pocket", "#pocket-button", "pocket-button"],
   ];
   // We add these at the beginning because adding them at the end can end up
   // putting them in the overflow panel, where they aren't displayed the same way.
@@ -212,7 +211,6 @@ add_task(async function test_all_icons() {
     ["text_encoding", "fox.svg"],
     ["email_link", "fox.svg"],
     ["forget", "fox.svg"],
-    ["pocket", "fox.svg"],
   ];
   await runTestWithIcons(icons);
 });
@@ -254,7 +252,6 @@ add_task(async function test_some_icons() {
     ["text_encoding", ""],
     ["email_link", ""],
     ["forget", ""],
-    ["pocket", "fox.svg"],
   ];
   await runTestWithIcons(icons);
 });
