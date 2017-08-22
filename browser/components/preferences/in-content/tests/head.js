@@ -17,20 +17,19 @@ const REMOVE_DIALOG_URL = "chrome://browser/content/preferences/siteDataRemoveSe
 const { SiteDataManager } = Cu.import("resource:///modules/SiteDataManager.jsm", {});
 const mockSiteDataManager = {
 
-  _originalGetQuotaUsage: null,
+  _originalQMS: null,
   _originalRemoveQuotaUsage: null,
 
-  _getQuotaUsage() {
-    let results = [];
+  getUsage(onUsageResult) {
+    let result = [];
     this.fakeSites.forEach(site => {
-      results.push({
+      result.push({
         origin: site.principal.origin,
         usage: site.usage,
         persisted: site.persisted
       });
     });
-    SiteDataManager._getQuotaUsagePromise = Promise.resolve(results);
-    return SiteDataManager._getQuotaUsagePromise;
+    onUsageResult({ result });
   },
 
   _removeQuotaUsage(site) {
@@ -41,15 +40,15 @@ const mockSiteDataManager = {
   },
 
   register() {
-    this._originalGetQuotaUsage = SiteDataManager._getQuotaUsage;
-    SiteDataManager._getQuotaUsage = this._getQuotaUsage.bind(this);
+    this._originalQMS = SiteDataManager._qms;
+    SiteDataManager._qms = this;
     this._originalRemoveQuotaUsage = SiteDataManager._removeQuotaUsage;
     SiteDataManager._removeQuotaUsage = this._removeQuotaUsage.bind(this);
     this.fakeSites = null;
   },
 
   unregister() {
-    SiteDataManager._getQuotaUsage = this._originalGetQuotaUsage;
+    SiteDataManager._qms = this._originalQMS;
     SiteDataManager._removeQuotaUsage = this._originalRemoveQuotaUsage;
   }
 };
