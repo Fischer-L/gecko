@@ -275,3 +275,16 @@ function assertModalDialog(browser, args) {
     }
   });
 }
+
+function assertOnboardingDestroyed(browser) {
+  return ContentTask.spawn(browser, {}, function() {
+    let expectedRemovals = [
+      "#onboarding-overlay",
+      "#onboarding-overlay-button"
+    ];
+    for (let selector of expectedRemovals) {
+      let removal = content.document.querySelector(selector);
+      ok(!removal, `Should remove ${selector} onboarding element`);
+    }
+  });
+}
