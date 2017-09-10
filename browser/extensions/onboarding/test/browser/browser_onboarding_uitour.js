@@ -24,6 +24,58 @@ async function triggerCustomizeUITourHighlight(tab) {
   BrowserTestUtils.synthesizeMouseAtCenter("#onboarding-tour-customize-button", {}, tab.linkedBrowser);
 }
 
+add_task(async function test_clean_up_uitour_after_closing_overlay() {
+  resetOnboardingDefaultState();
+  await SpecialPowers.pushPrefEnv({set: [
+    ["browser.onboarding.newtour", "singlesearch,customize"],
+  ]});
+
+  // Trigger UITour showHighlight
+  let highlight = document.getElementById("UITourHighlightContainer");
+  let highlightOpenPromise = promisePopupChange(highlight, "open");
+  let tab = await openTab(ABOUT_NEWTAB_URL);
+  await triggerCustomizeUITourHighlight(tab);
+  await highlightOpenPromise;
+  is(highlight.state, "open", "Should show UITour highlight");
+  is(highlight.getAttribute("targetName"), "customize", "UITour should highlight customize");
+
+  // Close the overlay by clicking the overlay
+  let highlightClosePromise = promisePopupChange(highlight, "closed");
+  BrowserTestUtils.synthesizeMouseAtPoint(2, 2, {}, tab.linkedBrowser);
+  await promiseOnboardingOverlayClosed(tab.linkedBrowser);
+  await highlightClosePromise;
+  is(highlight.state, "closed", "Should close UITour highlight after closing the overlay by clicking the overlay");
+
+  // Trigger UITour showHighlight
+  highlightOpenPromise = promisePopupChange(highlight, "open");
+  await triggerCustomizeUITourHighlight(tab);
+  await highlightOpenPromise;
+  is(highlight.state, "open", "Should show UITour highlight");
+  is(highlight.getAttribute("targetName"), "customize", "UITour should highlight customize");
+
+  // Close the overlay by clicking the overlay close button
+  highlightClosePromise = promisePopupChange(highlight, "closed");
+  BrowserTestUtils.synthesizeMouseAtCenter("#onboarding-overlay-close-btn", {}, tab.linkedBrowser);
+  await promiseOnboardingOverlayClosed(tab.linkedBrowser);
+  await highlightClosePromise;
+  is(highlight.state, "closed", "Should close UITour highlight after closing the overlay by clicking the overlay close button");
+
+  // Trigger UITour showHighlight again
+  highlightOpenPromise = promisePopupChange(highlight, "open");
+  await triggerCustomizeUITourHighlight(tab);
+  await highlightOpenPromise;
+  is(highlight.state, "open", "Should show UITour highlight");
+  is(highlight.getAttribute("targetName"), "customize", "UITour should highlight customize");
+
+  // Close the overlay by clicking the skip-tour button
+  highlightClosePromise = promisePopupChange(highlight, "closed");
+  BrowserTestUtils.synthesizeMouseAtCenter("#onboarding-skip-tour-btn", {}, tab.linkedBrowser);
+  await promiseOnboardingOverlayClosed(tab.linkedBrowser);
+  await highlightClosePromise;
+  is(highlight.state, "closed", "Should close UITour highlight after closing the overlay by clicking the skip-tour button");
+  await BrowserTestUtils.removeTab(tab);
+});
+
 add_task(async function test_clean_up_uitour_after_navigating_to_other_tour_by_keyboard() {
   resetOnboardingDefaultState();
   await SpecialPowers.pushPrefEnv({set: [
