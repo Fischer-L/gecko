@@ -1228,6 +1228,10 @@ this.UITour = {
   },
 
   hideHighlight(aWindow) {
+    let highlight = aWindow.document.getElementById("UITourHighlightContainer");
+    if (highlight.state == "closed") {
+      return;
+    }
     this._hideHighlightElement(aWindow);
     this._setMenuStateForAnnotation(aWindow, false, "appMenu");
     this._setMenuStateForAnnotation(aWindow, false, "pageActionPanel");
@@ -1370,6 +1374,10 @@ this.UITour = {
   },
 
   hideInfo(aWindow) {
+    let tooltip = document.getElementById("UITourTooltip");
+    if (tooltip.state == "closed") {
+      return;
+    }
     this._hideInfoElement(aWindow);
     this._setMenuStateForAnnotation(aWindow, false, "appMenu");
     this._setMenuStateForAnnotation(aWindow, false, "pageActionPanel");
