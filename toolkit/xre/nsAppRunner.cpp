@@ -2576,10 +2576,17 @@ SelectProfile(nsIProfileLock* *aResult, nsIToolkitProfileService* aProfileSvc, n
 #endif
 
   if (!count) {
-    // For a fresh install, we would like to let users decide
-    // to do profile migration on their own later after using.
-    gDoMigration = false;
+    gDoMigration = true;
     gDoProfileReset = false;
+    
+    bool activityStreamEnabled =
+      Preferences::GetBool("browser.newtabpage.activity-stream.enabled", false);
+    if (activityStreamEnabled) {
+      // For a fresh install and Activity Stream enabled, 
+      // we would like to let users decide to do profile migration 
+      // on their own later after using.
+      gDoMigration = false;
+    }
 
     // create a default profile
     nsCOMPtr<nsIToolkitProfile> profile;
