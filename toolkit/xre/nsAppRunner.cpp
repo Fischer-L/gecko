@@ -2574,14 +2574,30 @@ SelectProfile(nsIProfileLock* *aResult, nsIToolkitProfileService* aProfileSvc, n
     }
   }
 #endif
+    
+  bool tmpASEnabled =
+    Preferences::GetBool("tmp.pretend-activity-stream.enabled", false);
+  fprintf(stderr, "TMP> expect tmp.pretend-activity-stream.enabled is TRUE");
+  if (tmpASEnabled) {
+    fprintf(stderr, "TMP> tmp.pretend-activity-stream.enabled is TRUE");
+  } else {
+    fprintf(stderr, "TMP> tmp.pretend-activity-stream.enabled is FALSE");
+  }
+  
+  bool ASEnabled =
+    Preferences::GetBool("browser.newtabpage.activity-stream.enabled", false);
+  fprintf(stderr, "TMP> expect browser.newtabpage.activity-stream.enabled is TRUE");
+  if (ASEnabled) {
+    fprintf(stderr, "TMP> browser.newtabpage.activity-stream.enabled is TRUE");
+  } else {
+    fprintf(stderr, "TMP> browser.newtabpage.activity-stream.enabled is FALSE");
+  }
 
   if (!count) {
     gDoMigration = true;
     gDoProfileReset = false;
-    
-    bool activityStreamEnabled =
-      Preferences::GetBool("browser.newtabpage.activity-stream.enabled", false);
-    if (activityStreamEnabled) {
+
+    if (tmpASEnabled) {
       // For a fresh install and Activity Stream enabled, 
       // we would like to let users decide to do profile migration 
       // on their own later after using.

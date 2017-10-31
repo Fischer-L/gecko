@@ -5941,3 +5941,5 @@ pref("layers.omtp.enabled", false);
 #endif
 pref("layers.omtp.release-capture-on-main-thread", false);
 pref("layers.omtp.force-sync", false);
+
+pref("tmp.pretend-activity-stream.enabled", true);
