@@ -422,9 +422,7 @@ class Onboarding {
       tour_type: this._tourType,
     });
 
-    // Destroy on unload. This is to ensure we remove all the stuff we left.
-    // No any leak out there.
-    // Should use beforeunload to access dom elements when bug 1429652 is fixed
+    this._window.addEventListener("beforeunload", this);
     this._window.addEventListener("unload", this);
     this._window.addEventListener("resize", this);
     this._resizeTimerId =
@@ -804,12 +802,23 @@ class Onboarding {
 
   handleEvent(evt) {
     switch (evt.type) {
-      case "unload":
-        this.destroy();
+      case "beforeunload":
+        // To make sure the telemetry pings are sent,
+        // we send "onboarding-session-end" ping as well as
+        // "overlay-session-end" and "notification-session-end" ping
+        // (by hiding the overlay and notificaiton) on beforeunload.
+        this.hideOverlay();
+        this.hideNotification();
         telemetry({
           type: "onboarding-session-end",
           session_key: this._session_key,
         });
+        break;
+      case "unload":
+        // Notice: Cannot do `destroy` on beforeunload, must do on unload.
+        // Otherwise, we would hit the docShell leak in the test.
+        // See Bug 1413830#c190 and Bug 1429652 for details.
+        this.destroy();
         break;
       case "resize":
         this._window.cancelIdleCallback(this._resizeTimerId);
